@@ -1,0 +1,39 @@
+---
+// やさしい図：住宅性能の3つのものさし
+const ITEMS = [
+  {
+    t: '暖かさ（断熱）',
+    d: '外の暑さ・寒さを伝えにくい家。冬の部屋が冷えにくい',
+    g: '断熱等性能等級',
+    ic: '<path d="M8 32 L32 12 L56 32 M13 28 V54 H51 V28"/><rect x="29" y="30" width="6" height="18" rx="3" class="ac"/><circle cx="32" cy="48" r="5" class="ac"/>',
+  },
+  {
+    t: '省エネ',
+    d: '冷暖房や給湯で使うエネルギーが少ない家。光熱費に効く',
+    g: '一次エネルギー消費量等級',
+    ic: '<circle cx="32" cy="36" r="20"/><path d="M32 36 L44 24" class="ac"/><path d="M16 36 H20 M44 36 H48 M32 20 V24"/>',
+  },
+  {
+    t: '地震への強さ（耐震）',
+    d: '大きな地震でも倒れにくい家',
+    g: '耐震等級（1〜3）',
+    ic: '<path d="M14 32 L32 16 L50 32 M18 29 V54 H46 V29"/><path d="M6 20 C4 26 8 30 6 36 M58 20 C60 26 56 30 58 36" class="ac"/><path d="M26 54 V40 H38 V54"/>',
+  },
+];
+---
+
+<div class="easy">
+  <ul class="easy-grid">
+    {
+      ITEMS.map((x) => (
+        <li class="easy-card">
+          <svg class="ic" viewBox="0 0 64 64" aria-hidden="true" set:html={x.ic} />
+          <h3>{x.t}</h3>
+          <p>{x.d}</p>
+          <p class="sub">ものさし：{x.g}</p>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="easy-note">どの等級も、<strong>数字が大きいほど性能が高い</strong>と読みます。「○○相当」ではなく、評価書などの書類で確かめるのがポイントです。</p>
+</div>

@@ -1,0 +1,56 @@
+---
+// やさしい図：家づくりの3つの役割と、依頼先のタイプ
+const ROLES = [
+  {
+    t: '設計',
+    d: '間取りや仕様を決めて、図面を描く',
+    ic: '<rect x="10" y="12" width="36" height="42"/><path d="M16 22 H40 M16 30 H34 M16 38 H38"/><path d="M50 10 L56 16 L38 34 L32 36 L34 30 Z" class="ac"/>',
+  },
+  {
+    t: '施工',
+    d: '図面のとおりに、家をつくる',
+    ic: '<path d="M10 56 H54"/><path d="M14 36 L32 20 L50 36 M18 33 V56 H46 V33"/><path d="M40 8 L52 20 M36 12 L46 2 L56 12 L46 22 Z" class="ac"/>',
+  },
+  {
+    t: '工事監理',
+    d: '図面どおりにつくられているか、建築士が確かめる',
+    ic: '<circle cx="26" cy="26" r="14"/><line x1="36" y1="36" x2="52" y2="52"/><polyline points="19,26 24,31 33,21" class="ac"/>',
+  },
+];
+const TYPES = ['大手ハウスメーカー', '中堅・地域ビルダー', '規格型（価格重視）', '工務店', '設計事務所＋工務店', 'フランチャイズ系'];
+---
+
+<div class="easy">
+  <ul class="easy-grid">
+    {
+      ROLES.map((x) => (
+        <li class="easy-card">
+          <svg class="ic" viewBox="0 0 64 64" aria-hidden="true" set:html={x.ic} />
+          <h3>{x.t}</h3>
+          <p>{x.d}</p>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="easy-note">依頼先のタイプによって、この3つを<strong>誰が担当するか</strong>と、<strong>最初から含まれる仕様の範囲</strong>が変わります。どのタイプが良い・悪いではありません。</p>
+  <ul class="chips" aria-label="依頼先のタイプ">
+    {TYPES.map((t) => <li>{t}</li>)}
+  </ul>
+</div>
+
+<style>
+  .chips {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chips li {
+    border: 1px solid var(--ink);
+    padding: 0.3rem 0.8rem;
+    font-size: 0.9rem;
+  }
+</style>

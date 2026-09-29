@@ -1,0 +1,66 @@
+---
+// やさしい図：家の種類（注文住宅・建売住宅・マンション）
+const TYPES = [
+  {
+    t: '注文住宅',
+    d: '土地を用意して、間取りから決めて建てる',
+    ic: '<rect x="8" y="40" width="48" height="16" rx="1" class="fl"/><path d="M14 36 L32 20 L50 36 M18 33 V52 H46 V33" stroke-dasharray="4 3"/><path d="M8 58 H56"/><path d="M40 10 L52 22 L44 22" class="ac"/><line x1="40" y1="10" x2="30" y2="20" class="ac"/>',
+  },
+  {
+    t: '建売住宅',
+    d: '土地と家がセット。完成した家を見て買える',
+    ic: '<path d="M8 30 L30 12 L52 30 M13 26 V54 H47 V26"/><rect x="25" y="38" width="10" height="16"/><path d="M40 8 H58 V18 H40 Z" class="ac"/><path d="M8 58 H56"/>',
+  },
+  {
+    t: 'マンション',
+    d: '建物の一室を買う。建物の管理はみんなで',
+    ic: '<rect x="14" y="6" width="36" height="50"/><path d="M8 58 H56"/><rect x="20" y="12" width="8" height="7"/><rect x="36" y="12" width="8" height="7"/><rect x="20" y="25" width="8" height="7"/><rect x="36" y="25" width="8" height="7" class="ac"/><rect x="20" y="38" width="8" height="7"/><rect x="36" y="38" width="8" height="7"/>',
+  },
+];
+
+const ROWS = [
+  { k: '決められること', v: ['間取り・仕様をほぼ自由に', '基本は決まっている', '室内の一部（リフォーム程度）'] },
+  { k: '買う前に現物を見られるか', v: ['見られない（図面で決める）', '完成済みなら見られる', '完成済みなら見られる'] },
+  { k: 'お金の払い方', v: ['完成前から何度も払う', '契約時の手付＋引渡し時に残り', '契約時の手付＋引渡し時に残り'] },
+  { k: '住んでからの費用', v: ['修繕の計画も積立も自分で', '修繕の計画も積立も自分で', '管理費と修繕積立金を毎月'] },
+  { k: 'かかる時間', v: ['長い（土地探し・設計・工事）', '短い', '短い（完成済みなら）'] },
+];
+---
+
+<div class="easy">
+  <ul class="easy-grid">
+    {
+      TYPES.map((x) => (
+        <li class="easy-card">
+          <svg class="ic" viewBox="0 0 64 64" aria-hidden="true" set:html={x.ic} />
+          <h3>{x.t}</h3>
+          <p>{x.d}</p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="easy-table-wrap" tabindex="0" role="region" aria-label="家の種類のちがい">
+    <table class="easy-table">
+      <thead>
+        <tr>
+          <th scope="col"><span class="sr-only">比べること</span></th>
+          {TYPES.map((x) => <th scope="col">{x.t}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {
+          ROWS.map((r) => (
+            <tr>
+              <th scope="row">{r.k}</th>
+              {r.v.map((v) => (
+                <td>{v}</td>
+              ))}
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="easy-note">このほかに、中古の一戸建て・中古マンションという選び方もあります。どれが良い・悪いではなく、何を優先するかで選びます。</p>
+</div>

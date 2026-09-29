@@ -478,3 +478,111 @@ sup.src a {
   color: var(--accent);
   font-weight: 700;
 }
+
+/* やさしい絵（各章の冒頭）：太めの線・大きめの文字・少ない情報 */
+.easy {
+  margin: 0;
+}
+
+.easy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.easy-card {
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+  padding: 1rem 1.1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.easy-card .ic {
+  width: 64px;
+  height: 64px;
+}
+
+.easy-card .ic path,
+.easy-card .ic rect,
+.easy-card .ic circle,
+.easy-card .ic line,
+.easy-card .ic polyline {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.easy-card .ic .ac {
+  stroke: var(--accent);
+}
+
+.easy-card .ic .fl {
+  fill: var(--accent-soft);
+  stroke: none;
+}
+
+.easy-card h3,
+.easy-card .ttl {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.easy-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.easy-card .sub {
+  font-size: 0.82rem;
+  color: var(--mute);
+}
+
+.easy-note {
+  margin: 1rem 0 0;
+  padding: 0.7rem 1rem;
+  border-left: 3px solid var(--accent);
+  background: var(--paper-deep);
+  font-size: 0.95rem;
+}
+
+.easy-table-wrap {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+}
+
+.easy-table {
+  width: 100%;
+  min-width: 560px;
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.easy-table th,
+.easy-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.65rem 0.7rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.easy-table thead th {
+  border-bottom: 1.5px solid var(--ink);
+  font-size: 0.95rem;
+}
+
+.easy-table tbody th {
+  font-weight: 700;
+  white-space: nowrap;
+  font-size: 0.88rem;
+  color: var(--mute);
+}

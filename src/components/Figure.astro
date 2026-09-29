@@ -1,23 +1,26 @@
 ---
 // 図解の外枠。図番号・タイトル・「この図のポイント」・出典番号を統一的に扱う
 import { registryOf } from '../lib/sources';
+import { LEVEL_LABEL, type Level } from '../data/chapters';
 
 interface Props {
   num: string;
   title: string;
   point: string;
   kind: 'interactive' | 'scroll' | 'static';
+  /** 図の難しさ（1 やさしい・2 ふつう・3 くわしい） */
+  level: Level;
   facts?: string[];
   id?: string;
 }
 
-const { num, title, point, kind, facts = [], id } = Astro.props;
+const { num, title, point, kind, level, facts = [], id } = Astro.props;
 const reg = registryOf(Astro.locals);
 // 図の中身を先に描画して、中で使われた出典を先に採番する
 const body = await Astro.slots.render('default');
 const notes = Astro.slots.has('notes') ? await Astro.slots.render('notes') : '';
 const numbers = [...new Set(facts.map((f) => reg.register(f).n))].sort((a, b) => a - b);
-const kindLabel = { interactive: '触って動く図', scroll: 'スクロールで展開する図', static: '一覧の図' }[kind];
+const kindLabel = { interactive: '触って動く図', scroll: 'スクロールで展開する図', static: '見るだけの図' }[kind];
 const figId = id ?? `fig-${num.replace(/[^0-9-]/g, '')}`;
 ---
 
@@ -25,7 +28,14 @@ const figId = id ?? `fig-${num.replace(/[^0-9-]/g, '')}`;
   <header class="fig-head">
     <span class="fig-num">図{num}</span>
     <h3 id={`${figId}-title`}>{title}</h3>
-    <span class="fig-kind">{kindLabel}</span>
+    <span class="fig-kind">
+      <span class={`lv lv-${level}`}>
+        <span class="sr-only">難しさ：</span>
+        {[1, 2, 3].map((i) => <i class={i <= level ? 'on' : ''} aria-hidden="true" />)}
+        {LEVEL_LABEL[level]}の図
+      </span>
+      {kindLabel}
+    </span>
   </header>
   <div class="fig-body"><Fragment set:html={body} /></div>
   <figcaption>
@@ -76,6 +86,34 @@ const figId = id ?? `fig-${num.replace(/[^0-9-]/g, '')}`;
     grid-column: 2;
     font-size: 0.78rem;
     color: var(--mute);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.2rem 0.8rem;
+  }
+
+  .lv {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .lv i {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+  }
+
+  .lv i.on {
+    background: var(--accent);
+  }
+
+  .lv i:last-of-type {
+    margin-right: 4px;
   }
 
   figcaption {

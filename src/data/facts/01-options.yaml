@@ -173,7 +173,7 @@
   volatility: annual
 
 - id: jhf-maintenance
-  claim: 木造戸建ての維持管理の目安（外壁の窯業系サイディング15〜20年、給湯器10年位 など）
+  claim: 木造戸建ての維持管理の目安（外壁の窯業系サイディング15〜20年位で全面補修を検討、給湯器10年位で取替え、床組は20〜30年で、5〜10年ごとに防腐・防蟻の再処理 など）
   asOf: 資料の作成年は記載なし
   source: &jhfmaint
     title: 住まいの維持管理の目安
@@ -181,3 +181,30 @@
     url: https://www.jhf.go.jp/files/a/public/jhf/300237187.pdf
     type: primary
   volatility: stable
+
+- id: f35-term-age
+  claim: フラット35で35年の借入期間をとれる申込時の年齢の上限（借入期間の上限は「80歳−申込時の年齢」と35年の短いほう）
+  value: 45
+  unit: 歳
+  asOf: 2026年9月29日閲覧
+  source:
+    title: 【フラット35】ご利用条件
+    publisher: 住宅金融支援機構
+    url: https://www.flat35.com/loan/lineup/flat35/conditions/index.html
+    type: primary
+  volatility: annual
+  derived:
+    formula: 80歳 − 35年 ＝ 45歳（これより上の年齢では、借入期間の上限が35年より短くなる）
+    from: [f35-conditions]
+
+- id: gift-tax-exemption
+  claim: 住宅取得等資金の贈与税の非課税。省エネ等住宅は1,000万円、それ以外は500万円まで。対象は2026年12月31日までの贈与
+  values: { energy: 1000, other: 500 }
+  unit: 万円
+  asOf: 令和8年4月1日現在
+  source:
+    title: No.4508 直系尊属から住宅取得等資金の贈与を受けた場合の非課税
+    publisher: 国税庁
+    url: https://www.nta.go.jp/taxes/shiraberu/taxanswer/zoyo/4508.htm
+    type: primary
+  volatility: annual

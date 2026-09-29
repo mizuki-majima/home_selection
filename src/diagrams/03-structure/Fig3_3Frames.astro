@@ -1,0 +1,182 @@
+---
+// 図3-3 骨組みを分解する（スクロール・分解アクソメ）
+import Scrolly from '../shared/Scrolly.astro';
+import Fact from '../../components/Fact.astro';
+import { FRAMES, VIEWBOX } from './frames';
+---
+
+<Scrolly label="5種類の骨組みを分解したアクソメ図" mode="swap">
+  <div slot="stage" class="frames">
+    {
+      FRAMES.map((f, i) => (
+        <figure class="frame" data-frame={i + 1}>
+          <svg viewBox={VIEWBOX} role="img" aria-label={`${f.name}の骨組み。${f.members.map((m) => m.label).join('、')}の順に組み上がる`}>
+            <g class="draft" aria-hidden="true">
+              {f.members.map((m) => (
+                <path class="ln-draft" d={m.d} />
+              ))}
+            </g>
+            {f.members.map((m) => (
+              <g class="member">
+                <path class={m.accent ? 'ln-accent draw' : 'ln draw'} d={m.d} />
+              </g>
+            ))}
+          </svg>
+          <figcaption>{f.name}</figcaption>
+        </figure>
+      ))
+    }
+  </div>
+
+  <li>
+    <h4>在来軸組（木造）</h4>
+    <p>柱と梁で骨組みをつくり、筋かい（テラコッタの斜め線）や面材で地震の横からの力に耐えます。</p>
+    <dl class="card">
+      <dt>持家一戸建ての着工</dt>
+      <dd>木造 <Fact id="chakko-2025-mochiie" k="wood" unit="戸" />（<Fact id="chakko-2025-mochiie" k="woodShare" unit="%" bare />）</dd>
+      <dt>単価（2025年）</dt>
+      <dd>在来木造 <Fact id="chakko-2025-unit-conventional" /></dd>
+      <dt>法定耐用年数</dt>
+      <dd><Fact id="law-taiyonensu" k="wood" /></dd>
+      <dt>構造計算の法的な要否</dt>
+      <dd>3階以上か延べ300㎡超で必要<Fact id="law-structural-calc" text="" /></dd>
+    </dl>
+  </li>
+  <li>
+    <h4>ツーバイフォー（木造枠組壁工法）</h4>
+    <p>角材の枠に合板を張った「床」と「壁」のパネルを箱のように組みます。</p>
+    <dl class="card">
+      <dt>着工</dt>
+      <dd>木造に含まれる（上と同じ）</dd>
+      <dt>単価（2025年）</dt>
+      <dd><Fact id="chakko-2025-unit" k="twoByFour" unit="万円/㎡" /></dd>
+      <dt>法定耐用年数</dt>
+      <dd><Fact id="law-taiyonensu" k="wood" /></dd>
+      <dt>構造計算の法的な要否</dt>
+      <dd>木造と同じ（3階以上か延べ300㎡超）</dd>
+    </dl>
+  </li>
+  <li>
+    <h4>鉄骨プレハブ（軽量鉄骨）</h4>
+    <p>工場でつくった鉄骨の柱・梁とブレース（X字の部材）を現場で組みます。</p>
+    <dl class="card">
+      <dt>持家一戸建ての着工</dt>
+      <dd>鉄骨造 <Fact id="chakko-2025-mochiie" k="steel" unit="戸" />。うちプレハブ約<Fact id="chakko-2025-prefab" /></dd>
+      <dt>単価（2025年）</dt>
+      <dd>鉄骨プレハブ <Fact id="chakko-2025-unit" k="steelPrefab" unit="万円/㎡" /></dd>
+      <dt>法定耐用年数</dt>
+      <dd>鋼材の厚さで <Fact id="law-taiyonensu" k="steelThin" bare />・<Fact id="law-taiyonensu" k="steelMid" bare />・<Fact id="law-taiyonensu" k="steelThick" /></dd>
+      <dt>構造計算の法的な要否</dt>
+      <dd>2階以上か延べ200㎡超で必要（木造以外）</dd>
+    </dl>
+  </li>
+  <li>
+    <h4>重量鉄骨ラーメン</h4>
+    <p>太い柱と梁を剛に接合して、ブレースなしで力に耐えます。大きな開口をとりやすい構造です。</p>
+    <dl class="card">
+      <dt>単価（2025年）</dt>
+      <dd>鉄骨造全体で <Fact id="chakko-2025-unit" k="steel" unit="万円/㎡" />（重量鉄骨だけの統計は未確認）</dd>
+      <dt>法定耐用年数</dt>
+      <dd>鋼材4mm超で <Fact id="law-taiyonensu" k="steelThick" /></dd>
+      <dt>構造計算の法的な要否</dt>
+      <dd>2階以上か延べ200㎡超で必要</dd>
+    </dl>
+  </li>
+  <li>
+    <h4>鉄筋コンクリート（RC）</h4>
+    <p>鉄筋を組んだ型枠にコンクリートを打ち込み、壁と床（スラブ）を一体でつくります。</p>
+    <dl class="card">
+      <dt>持家一戸建ての着工</dt>
+      <dd>RC造 <Fact id="chakko-2025-mochiie" k="rc" unit="戸" /></dd>
+      <dt>単価（2025年）</dt>
+      <dd><Fact id="chakko-2025-unit" k="rc" unit="万円/㎡" /></dd>
+      <dt>法定耐用年数</dt>
+      <dd><Fact id="law-taiyonensu" k="rc" /></dd>
+      <dt>構造計算の法的な要否</dt>
+      <dd>2階以上か延べ200㎡超で必要</dd>
+    </dl>
+  </li>
+</Scrolly>
+
+<style>
+  .frames {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+    gap: 1.5rem 1rem;
+    width: 100%;
+  }
+
+  .frame {
+    margin: 0;
+  }
+
+  .frame svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .frame figcaption {
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-top: 0.4rem;
+  }
+
+  /* JS 有効時：5枚を重ねて1枚ずつ見せる */
+  :global(.scrolly.is-live) .frames {
+    display: block;
+    position: relative;
+    height: 100%;
+  }
+
+  :global(.scrolly.is-live) .frame {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+  }
+
+  :global(.scrolly.is-live) .frame svg {
+    height: calc(100% - 2.5rem);
+    width: auto;
+    max-width: 100%;
+  }
+
+  :global(.scrolly.is-live) .frame figcaption {
+    font-size: 1rem;
+  }
+
+  .card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.35rem 1rem;
+    margin: 0.8rem 0 0;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--ink);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .card dt {
+    color: var(--mute);
+    font-size: 0.8rem;
+    padding-top: 0.1rem;
+  }
+
+  .card dd {
+    margin: 0;
+  }
+
+  @media (max-width: 480px) {
+    .card {
+      grid-template-columns: 1fr;
+    }
+    .card dt {
+      padding-top: 0.4rem;
+    }
+  }
+</style>

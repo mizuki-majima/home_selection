@@ -1,0 +1,86 @@
+---
+import ChapterLayout from '../../layouts/ChapterLayout.astro';
+import Figure from '../../components/Figure.astro';
+import Fact from '../../components/Fact.astro';
+import Term from '../../components/Term.astro';
+import Types from '../../diagrams/simple/Types.astro';
+import Fig2_2Types from '../../diagrams/02-types/Fig2_2Types.astro';
+---
+
+<ChapterLayout slug="02-types">
+  <Fragment slot="simple">
+    <p class="lead-big">
+      新築の家は大きく3種類。いちばんのちがいは「自分で決められる範囲」と「完成品を見て買えるか」です。
+    </p>
+    <Figure
+      num="2-1"
+      title="注文住宅・建売住宅・マンション"
+      kind="static"
+      level={1}
+      point="どれが良い・悪いではなく、何を優先するかで選ぶ。自由度を取るか、完成品を見て決める安心を取るか。"
+    >
+      <Types />
+    </Figure>
+  </Fragment>
+
+  <ol slot="points">
+    <li>
+      <strong>自由に決めたいなら注文住宅、見て決めたいなら建売・マンション。</strong>
+      注文住宅は間取りや仕様を一から決められる代わりに、完成品を見ずに図面で決めます。建売住宅とマンションは、完成済みなら現物を見てから買えます。
+    </li>
+    <li>
+      <strong>払う額も、種類でちがう。</strong>
+      フラット35利用者（2025年度・全国平均）では、所要資金（購入価額）が土地付注文住宅<Fact id="f35-2025-chumon-tochi" k="total" unit="万円" bare />、建売住宅<Fact id="f35-2025-tateuri" k="total" unit="万円" bare />、マンション<Fact id="f35-2025-mansion" k="total" unit="万円" />。ただし、調査が変わると順位が入れ替わる指標もあります（図2-2）。
+    </li>
+    <li>
+      <strong>払い方も、種類でちがう。</strong>
+      注文住宅は完成前から何度も払います（01章）。建売住宅とマンションは、売買契約のときの手付と、引渡しのときの残りが基本です。
+    </li>
+    <li>
+      <strong>住んでからの費用の形もちがう。</strong>
+      マンションは管理費と修繕積立金を毎月払います（平均で管理費<Fact id="mansion-survey-r5" k="mgmt" unit="円" bare />・修繕積立金<Fact id="mansion-survey-r5" k="repair" unit="円" />／月）。一戸建てには決まった積立がない代わりに、修繕の計画も積立も自分でやります（目安：給湯器は10年位、外壁は15〜20年位<Fact id="jhf-maintenance" text="" />）。
+    </li>
+    <li>
+      <strong>「平均」だけで相場を判断しない。</strong>
+      土地を買って注文住宅を建てた世帯の購入資金は、平均<Fact id="mlit-shijo-r7-price" k="chumonMean" unit="万円" bare />に対し、真ん中の値（中央値）は<Fact id="mlit-shijo-r7-price" k="chumonMedian" unit="万円" />です（<Term k="median" />）。
+    </li>
+  </ol>
+
+  <h2 class="sec">図でくわしく</h2>
+
+  <Figure
+    num="2-2"
+    title="新築3タイプを数字で並べる"
+    kind="static"
+    level={3}
+    point="●評価ではなく統計の数値だけで並べる。調査が違う数値は同じ軸に置かない。"
+    facts={['f35-2025-chumon-tochi', 'mlit-shijo-r7-price']}
+  >
+    <Fig2_2Types />
+    <Fragment slot="notes">
+      <p>フラット35利用者調査は全期間固定の利用者だけの集計で、変動金利の利用者は含みません。<Term k="totalBurden" />と<Term k="burden" />は定義が違います。</p>
+    </Fragment>
+  </Figure>
+
+  <h2 class="sec">よくある誤解</h2>
+  <ul class="myths">
+    <li>
+      <p class="myth">平均額が相場</p>
+      <p class="truth">平均は高額な例に引っぱられます。中央値もあわせて見ます。</p>
+    </li>
+    <li>
+      <p class="myth">戸建ては管理費がないから維持費が安い</p>
+      <p class="truth">毎月の積立がないだけで、更新費用は自分で準備します。</p>
+    </li>
+    <li>
+      <p class="myth">返済負担率がいちばん高いのは注文住宅</p>
+      <p class="truth">フラット35利用者ではそうですが、国交省の住宅市場動向調査では分譲戸建（<Fact id="mlit-shijo-r7-burden" k="bunjo" unit="%" />）がいちばん高い。調査によって定義も対象も違います。</p>
+    </li>
+  </ul>
+
+  <h2 class="sec">注意書き</h2>
+  <ul class="notes">
+    <li>二つの調査は対象期間も地域も定義も違うため、同じ軸に並べていません。</li>
+    <li>注文住宅を建てた世帯の<Fact id="mlit-shijo-r7-compare" k="bunjo" unit="%" />は、新築の分譲戸建とも比べて検討していました。</li>
+  </ul>
+</ChapterLayout>

@@ -1,0 +1,416 @@
+---
+// 図2-2 新築3タイプを数字で並べる（ドットプロット。HTML で組み、スマホでも文字が縮まない）
+import Fact from '../../components/Fact.astro';
+import { valueOf } from '../../lib/facts';
+import { num } from '../../lib/format';
+
+const types = [
+  { id: 'f35-2025-chumon-tochi', name: '土地付注文住宅', shape: 'circle' },
+  { id: 'f35-2025-tateuri', name: '建売住宅', shape: 'square' },
+  { id: 'f35-2025-mansion', name: 'マンション', shape: 'diamond' },
+] as const;
+
+const metrics = [
+  { key: 'total', label: '所要資金・購入価額', unit: '万円', max: 7000, faint: [{ id: 'f35-2025-chumon', key: 'total' }, { id: 'f35-2025-used', key: 'house' }, { id: 'f35-2025-used', key: 'mansion' }] },
+  { key: 'income', label: '世帯年収', unit: '万円', max: 1200, faint: [] },
+  { key: 'ratio', label: '年収倍率', unit: '倍', max: 10, faint: [] },
+  { key: 'burden', label: '総返済負担率', unit: '%', max: 35, faint: [{ id: 'f35-2025-chumon', key: 'burden' }] },
+  { key: 'cash', label: '手持金', unit: '万円', max: 1600, faint: [{ id: 'f35-2025-chumon', key: 'cash' }] },
+  { key: 'area', label: '住宅面積', unit: '㎡', max: 140, faint: [{ id: 'f35-2025-chumon', key: 'area' }] },
+];
+const pos = (v: number, max: number) => `${((v / max) * 100).toFixed(2)}%`;
+
+const shijo = [
+  { key: 'chumon', name: '土地を購入して注文住宅' },
+  { key: 'bunjo', name: '分譲戸建' },
+  { key: 'mansion', name: '分譲マンション' },
+  { key: 'usedHouse', name: '中古戸建' },
+  { key: 'usedMansion', name: '中古マンション' },
+];
+const SMAX = 8000;
+---
+
+<div class="plot">
+  <p class="panel-title">フラット35利用者（2025年度・全国平均）<Fact id="f35-2025-chumon-tochi" text="" /></p>
+  <ul class="legend">
+    <li><span class="mk circle" aria-hidden="true"></span>土地付注文住宅</li>
+    <li><span class="mk square" aria-hidden="true"></span>建売住宅</li>
+    <li><span class="mk diamond" aria-hidden="true"></span>マンション</li>
+    <li><span class="mk faint" aria-hidden="true"></span>注文住宅（土地の取得費を借りていない）・中古</li>
+  </ul>
+
+  <div class="rows" role="img" aria-label={metrics.map((m) => `${m.label}：${types.map((t) => `${t.name}${num(valueOf(t.id, m.key), 1)}${m.unit}`).join('、')}`).join('。')}>
+    {
+      metrics.map((m) => (
+        <div class="row">
+          <p class="rlabel">
+            {m.label}
+            <small>（{m.unit}）</small>
+          </p>
+          <div class="track" aria-hidden="true">
+            <span class="tick0">0</span>
+            <span class="tickmax">{num(m.max)}</span>
+            {m.faint.map((f) => (
+              <span class="mk faint" style={`left:${pos(valueOf(f.id, f.key), m.max)}`} />
+            ))}
+            {types.map((t, j) => (
+              <span class={`pt pt-${j}`} style={`left:${pos(valueOf(t.id, m.key), m.max)}`}>
+                <span class={`mk ${t.shape}`} />
+                <span class="val">{num(valueOf(t.id, m.key), 1)}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <details class="data-table">
+    <summary>数値を表で見る</summary>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="新築3タイプの数値">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">指標</th>
+            {types.map((t) => <th scope="col">{t.name}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {metrics.map((m) => (
+            <tr>
+              <th scope="row">{m.label}</th>
+              {types.map((t) => (
+                <td>
+                  <Fact id={t.id} k={m.key} unit={m.unit} bare />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<div class="plot other">
+  <p class="panel-title">別の調査：住宅市場動向調査（令和7年度）<Fact id="mlit-shijo-r7-price" text="" /></p>
+  <p class="warn-label">調査が違う（フラット35利用者・全国／住宅市場動向調査：注文は全国、ほかは三大都市圏）。同じ軸に並べて比べません。</p>
+  <p class="axis-note"><span class="mk circle sm" aria-hidden="true"></span> 平均　<span class="med-mk" aria-hidden="true"></span> 中央値（購入資金・万円）</p>
+  <div class="rows" role="img" aria-label={`購入資金の平均と中央値。${shijo.map((s) => `${s.name} 平均${num(valueOf('mlit-shijo-r7-price', `${s.key}Mean`))}万円・中央値${num(valueOf('mlit-shijo-r7-price', `${s.key}Median`))}万円`).join('、')}`}>
+    {
+      shijo.map((s) => {
+        const mean = valueOf('mlit-shijo-r7-price', `${s.key}Mean`);
+        const med = valueOf('mlit-shijo-r7-price', `${s.key}Median`);
+        const lo = Math.min(mean, med);
+        const hi = Math.max(mean, med);
+        return (
+          <div class="row">
+            <p class="rlabel">
+              {s.name}
+              <small>
+                平均{num(mean)}・中央値{num(med)}
+              </small>
+            </p>
+            <div class="track" aria-hidden="true">
+              <span class="whisker" style={`left:${pos(lo, SMAX)};width:${(((hi - lo) / SMAX) * 100).toFixed(2)}%`} />
+              <span class="med-mk" style={`left:${pos(med, SMAX)}`} />
+              <span class="mk circle" style={`left:${pos(mean, SMAX)}`} />
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+  <div class="mini-grid">
+    <div>
+      <p class="mini-title">自己資金比率</p>
+      <ul>
+        {shijo.map((s) => (
+          <li>
+            {s.name} <Fact id="mlit-shijo-r7-selffund" k={s.key} unit="%" digits={1} bare />
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <p class="mini-title">返済負担率（最も高いのは分譲戸建）</p>
+      <ul>
+        {shijo.map((s) => (
+          <li>
+            {s.key === 'chumon' ? '注文住宅（建替えを含む全体）' : s.name} <Fact id="mlit-shijo-r7-burden" k={s.key} unit="%" digits={1} bare />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  .plot {
+    margin-bottom: 1.5rem;
+  }
+
+  .other {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--ink);
+  }
+
+  .panel-title {
+    font-weight: 800;
+    margin: 0 0 0.5rem;
+  }
+
+  .warn-label {
+    display: inline-block;
+    font-size: 0.82rem;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.2rem 0.6rem;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.8rem;
+    font-size: 0.82rem;
+  }
+
+  .legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .legend .mk,
+  .axis-note .mk {
+    position: static;
+    transform: none;
+  }
+
+  .rows {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.5rem 1.2rem;
+    padding: 0.2rem 0;
+  }
+
+  .rlabel {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .rlabel small {
+    display: block;
+    font-weight: 500;
+    color: var(--mute);
+    font-size: 0.75rem;
+  }
+
+  .track {
+    position: relative;
+    height: 64px;
+    margin-right: 1.5rem;
+  }
+
+  .track::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    border-top: 1px solid var(--rule);
+  }
+
+  .tick0,
+  .tickmax {
+    position: absolute;
+    top: calc(50% + 3px);
+    font-size: 0.68rem;
+    color: var(--mute);
+    line-height: 1.2;
+    padding-top: 2px;
+  }
+
+  .tick0 {
+    left: 0;
+  }
+
+  .tickmax {
+    right: 0;
+  }
+
+  .mk {
+    position: absolute;
+    top: 50%;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    transform: translate(-50%, -50%);
+  }
+
+  .mk.circle {
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .mk.sm {
+    width: 10px;
+    height: 10px;
+  }
+
+  .mk.square {
+    background: var(--ink);
+  }
+
+  .mk.diamond {
+    width: 11px;
+    height: 11px;
+    background: var(--paper);
+    border: 1.4px solid var(--ink);
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .legend .mk.diamond {
+    transform: rotate(45deg);
+  }
+
+  .mk.faint {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid var(--mute);
+    background: transparent;
+  }
+
+  .pt {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 0;
+  }
+
+  .pt .val {
+    position: absolute;
+    left: 0;
+    transform: translateX(-50%);
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  .pt-0 .val {
+    bottom: calc(50% + 9px);
+  }
+
+  .pt-0 .val {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .pt-1 .val {
+    top: calc(50% + 9px);
+  }
+
+  .pt-2 .val {
+    bottom: calc(50% + 21px);
+  }
+
+  .whisker {
+    position: absolute;
+    top: 50%;
+    height: 0;
+    border-top: 1.5px solid var(--ink);
+    transform: translateY(-50%);
+  }
+
+  .med-mk {
+    position: absolute;
+    top: 50%;
+    width: 0;
+    height: 16px;
+    border-left: 1.5px solid var(--ink);
+    transform: translateY(-50%);
+  }
+
+  .axis-note {
+    font-size: 0.8rem;
+    color: var(--mute);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .axis-note .med-mk {
+    position: static;
+    transform: none;
+    display: inline-block;
+    height: 12px;
+  }
+
+  .data-table summary {
+    cursor: pointer;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    font-size: 0.88rem;
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.45rem 0.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .mini-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: 1rem 2rem;
+    font-size: 0.88rem;
+    margin-top: 1.5rem;
+  }
+
+  .mini-title {
+    font-weight: 700;
+    margin: 0 0 0.3rem;
+  }
+
+  .mini-grid ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+
+  @media (max-width: 600px) {
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+    .track {
+      margin-right: 0.8rem;
+      margin-left: 0.4rem;
+    }
+  }
+</style>

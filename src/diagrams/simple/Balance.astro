@@ -1,0 +1,37 @@
+---
+// やさしい図：総予算は土地と建物で取り合う
+---
+
+<div class="easy bal">
+  <svg viewBox="0 0 360 170" role="img" aria-label="天秤の左に土地、右に建物。総予算は同じなので、土地に多く払うと建物に回せる額が減る">
+    <line class="ln" x1="180" y1="150" x2="180" y2="40" />
+    <path class="ln" d="M150 150 H210" />
+    <line class="ln-accent" x1="60" y1="58" x2="300" y2="30" />
+    <circle cx="180" cy="44" r="4" class="dot-accent" />
+    <path class="ln" d="M60 58 L30 104 H90 Z" />
+    <path class="ln" d="M300 30 L270 76 H330 Z" />
+    <text x="60" y="126" text-anchor="middle" font-size="18" font-weight="800">土地</text>
+    <text x="300" y="98" text-anchor="middle" font-size="18" font-weight="800">建物</text>
+  </svg>
+  <p class="formula">総予算 ＝ <b>土地</b> ＋ <b class="ac">建物</b> ＋ 諸費用</p>
+  <p class="easy-note">総予算が決まっていれば、土地に多く払うほど、建物に回せるお金は減ります。「立地」と「家の広さ・性能」のどちらを優先するかを先に決めておくと迷いにくくなります。</p>
+</div>
+
+<style>
+  .bal svg {
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    display: block;
+  }
+
+  .formula {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0.5rem 0 0;
+  }
+
+  .formula .ac {
+    color: var(--accent);
+  }
+</style>
