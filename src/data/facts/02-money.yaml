@@ -1,0 +1,192 @@
+# 02 お金・資金計画
+- id: boj-policy-rate
+  claim: 政策金利（無担保コールレートの誘導目標）。2024年3月にマイナス金利を解除し、2026年9月18日の決定で1.25%程度（9月24日から適用）
+  value: 1.25
+  unit: '%'
+  values: { r20240319: 0.1, r20240731: 0.25, r20250124: 0.5, r20251219: 0.75, r20260616: 1.0, r20260918: 1.25 }
+  asOf: 2026-09
+  source:
+    title: 当面の金融政策運営について（2026年9月18日）
+    publisher: 日本銀行
+    url: https://www.boj.or.jp/mopo/mpmdeci/mpr_2026/k260918a.pdf
+    type: primary
+  volatility: volatile
+  note: 2024年3月19日の決定は0〜0.1%程度
+
+- id: f35-rate-2026-09
+  claim: 2026年9月資金受取分のフラット35（21〜35年・融資率9割以下、新機構団信付き）の金利の最頻値
+  value: 3.46
+  unit: '%'
+  values: { mode: 3.46, min: 3.46, max: 5.69, over90: 3.57, flat20: 3.14, flat50: 3.70 }
+  asOf: 2026-09
+  source:
+    title: 【フラット35】借入金利の推移・金利情報
+    publisher: 住宅金融支援機構
+    url: https://www.simulation.jhf.go.jp/flat35/kinri/index.php/rates/top
+    type: primary
+  volatility: volatile
+
+- id: f35-rate-history
+  claim: フラット35（21〜35年・9割以下）の最低金利の推移
+  values: { y2023m04: 1.76, y2025m09: 1.89, y2025m12: 1.97, y2026m01: 2.08, y2026m02: 2.26, y2026m03: 2.25, y2026m04: 2.49, y2026m05: 2.71, y2026m06: 3.21, y2026m07: 3.14, y2026m08: 3.29, y2026m09: 3.46 }
+  asOf: 2026-09
+  source:
+    title: 【フラット35】借入金利の推移
+    publisher: 住宅金融支援機構
+    url: https://www.flat35.com/files/topics/6008_ext_99_0.pdf
+    type: primary
+  volatility: volatile
+
+- id: f35-variable-rules
+  claim: 変動金利型は、金利が半年ごと、返済額が5年ごとに見直されるのが一般的で、新しい返済額は旧返済額の1.25倍までが一般的。未払利息が発生する場合がある
+  asOf: 2026年4月現在の資料
+  source: &f35guide
+    title: フラット35 利用者向け資料（2026年4月現在）
+    publisher: 住宅金融支援機構
+    url: https://www.flat35.com/files/topics/6167_ext_99_1.pdf
+    type: primary
+  volatility: stable
+
+- id: f35-example-640
+  claim: 機構の試算例。年収640万円・固定2.25%・35年で借りられる額は約5,422万円、家計から逆算した返せる額は約2,614万円
+  values: { income: 640, rate: 2.25, years: 35, borrowable: 5422, repayable: 2614 }
+  asOf: 2026年4月現在の資料
+  source: *f35guide
+  volatility: annual
+
+- id: f35-conditions
+  claim: フラット35の総返済負担率の基準は、年収400万円未満30%以下、400万円以上35%以下。借入期間の上限は「80歳−申込時の年齢」と35年の短いほう
+  values: { under400: 30, over400: 35 }
+  asOf: 2026年9月29日閲覧
+  source:
+    title: 【フラット35】ご利用条件
+    publisher: 住宅金融支援機構
+    url: https://www.flat35.com/loan/lineup/flat35/conditions/index.html
+    type: primary
+  volatility: annual
+
+- id: f35-2025-average
+  claim: 2025年度のフラット35利用者の平均。世帯年収716万円、年収倍率6.6倍、総返済負担率22.8%
+  values: { income: 716, ratio: 6.6, burden: 22.8 }
+  asOf: 2025年度（2026年7月公表）
+  source:
+    title: 2025年度 フラット35利用者調査
+    publisher: 住宅金融支援機構
+    url: https://www.jhf.go.jp/files/topics/4941_ext_99_1.pdf
+    type: primary
+  volatility: annual
+
+- id: jhf-borrower-survey
+  claim: 住宅ローン利用者の実態調査（n=1,237）。変動型75.0%、固定期間選択型14.9%、全期間固定型10.1%
+  values: { variable: 75.0, fixedPeriod: 14.9, fixedAll: 10.1 }
+  asOf: 2026-02
+  source:
+    title: 住宅ローン利用者の実態調査（2026年2月公表）
+    publisher: 住宅金融支援機構
+    url: https://www.jhf.go.jp/files/topics/4955_ext_99_2.pdf
+    type: primary
+  volatility: volatile
+
+- id: tax-loan-limit
+  claim: 住宅ローン減税の借入限度額（新築、2026〜27年入居）。控除率0.7%、控除期間13年。かっこ内は子育て・若者夫婦世帯
+  values: { longlife: 4500, longlifeFamily: 5000, zeh: 3500, zehFamily: 4500, energy: 2000, energyFamily: 3000, rate: 0.7, years: 13 }
+  asOf: 2026年6月更新
+  source:
+    title: 住宅ローン減税
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/jutakukentiku/house/jutakukentiku_house_tk4_000325.html
+    type: primary
+  volatility: annual
+  note: 省エネ基準適合は2028年以降の入居で対象外（2027年末までに建築確認、または2028年6月30日までに建築なら2,000万円×10年）
+
+- id: tax-loan-reform-r8
+  claim: 令和8年度改正。入居期限は2030年12月31日。2028年以降の入居では、災害レッドゾーンの新築が対象外
+  asOf: 令和8年度改正
+  source:
+    title: 令和8年度 住宅税制改正の概要
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/jutakukentiku/house/jutakukentiku_house_tk2_000017.html
+    type: primary
+  volatility: annual
+
+- id: tax-loan-nta
+  claim: 住宅ローン控除の要件（若者夫婦世帯＝本人か配偶者が40歳未満、子育て世帯＝19歳未満の扶養親族がいる）
+  asOf: 2026年6月更新
+  source:
+    title: No.1211-1 住宅の新築等をし、令和4年以降に居住の用に供した場合（住宅借入金等特別控除）
+    publisher: 国税庁
+    url: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1211-1.htm
+    type: primary
+  volatility: annual
+
+- id: tax-loan-max-credit
+  claim: 1年あたりの最大控除額（借入限度額×0.7%）
+  values: { longlife: 31.5, longlifeFamily: 35, zeh: 24.5, zehFamily: 31.5, energy: 14, energyFamily: 21 }
+  unit: 万円
+  asOf: 2026年6月更新
+  source:
+    title: 住宅ローン減税
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/jutakukentiku/house/jutakukentiku_house_tk4_000325.html
+    type: primary
+  volatility: annual
+  derived:
+    formula: 借入限度額 × 0.7%
+    from: [tax-loan-limit]
+
+- id: tax-property-newbuild
+  claim: 新築住宅の固定資産税の減額。120㎡分までが1/2で、一般住宅は3年、長期優良住宅は5年。都市計画税は減額されない
+  values: { general: 3, longlife: 5 }
+  asOf: 2026年6月更新
+  source:
+    title: 住宅ローン減税・住宅税制
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/jutakukentiku/house/jutakukentiku_house_tk4_000325.html
+    type: primary
+  volatility: annual
+
+- id: subsidy-mirai-eco
+  claim: みらいエコ住宅2026事業（補助額は性能と世帯で決まり、予算上限に達すると受付終了。申請は登録事業者が行う）
+  asOf: 2026-09-29
+  source:
+    title: みらいエコ住宅2026事業
+    publisher: 国土交通省
+    url: https://mirai-eco2026.mlit.go.jp/
+    type: primary
+  volatility: volatile
+
+- id: subsidy-zeh
+  claim: ZEH補助金（令和8年度）。公募期間と予算の範囲で受け付ける
+  asOf: 令和8年度
+  source:
+    title: 令和8年度 ZEH補助金パンフレット
+    publisher: 環境省・経済産業省（執行団体）
+    url: https://zehweb.jp/assets/doc/R08ZEH_pamphlet.pdf
+    type: primary
+  volatility: volatile
+
+- id: earthquake-insurance
+  claim: 地震保険。保険金額は火災保険の30〜50%で上限は建物5,000万円。耐震等級による割引は等級1で10%、2で30%、3で50%、免震50%（重複不可）
+  values: { grade1: 10, grade2: 30, grade3: 50, isolation: 50, capBuilding: 5000 }
+  asOf: 2026年9月29日閲覧
+  source:
+    title: 地震保険制度の概要
+    publisher: 財務省
+    url: https://www.mof.go.jp/policy/financial_system/earthquake_insurance/jisin.htm
+    type: primary
+  volatility: annual
+
+- id: calc-payment-4000
+  claim: 4,000万円・35年・元利均等の毎月返済額（年0.8%／2.0%／3.46%）
+  values: { r08: 10.9, r20: 13.3, r346: 16.4 }
+  unit: 万円/月
+  asOf: 2026-09
+  source:
+    title: 【フラット35】借入金利の推移・金利情報
+    publisher: 住宅金融支援機構
+    url: https://www.simulation.jhf.go.jp/flat35/kinri/index.php/rates/top
+    type: primary
+  volatility: stable
+  derived:
+    formula: 借入額 × 月利 ÷ (1 − (1 + 月利)^−420)。3.46%は2026年9月のフラット35の最頻値
+    from: [f35-rate-2026-09]

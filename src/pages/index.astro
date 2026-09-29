@@ -1,0 +1,257 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BudgetBalance from '../diagrams/04-tradeoff/BudgetBalance.svelte';
+import Fact from '../components/Fact.astro';
+import SourceList from '../components/SourceList.astro';
+import { CHAPTERS } from '../data/chapters';
+import { chapterHref } from '../lib/paths';
+import { valueOf } from '../lib/facts';
+
+const ICONS: Record<string, string> = {
+  '01': 'M4 30 H44 M8 30 V18 L16 12 L24 18 V30 M30 24 H44 M30 18 H40 M30 12 H36',
+  '02': 'M24 6 A18 18 0 1 0 24.01 6 M17 14 L24 23 L31 14 M16 25 H32 M16 31 H32 M24 23 V38',
+  '03': 'M6 34 L24 42 L42 34 L24 26 Z M18 29 V20 L24 16 L30 20 V32',
+  '04': 'M24 8 V38 M10 38 H38 M8 16 H40 M8 16 L4 28 H14 Z M40 16 L36 28 H46 Z',
+  '05': 'M8 40 V16 L24 6 L40 16 V40 M8 28 H40 M16 40 V16 M32 40 V16 M8 40 L16 28 M32 28 L40 40',
+  '06': 'M8 40 V18 L24 8 L40 18 V40 Z M14 40 V22 M34 40 V22 M20 26 H28 M24 22 V30',
+  '07': 'M12 6 H32 L38 12 V42 H12 Z M18 18 H32 M18 24 H32 M18 30 H28 M30 36 L33 39 L38 33',
+};
+
+const regions = [
+  {
+    id: 'shuto',
+    name: '首都圏',
+    landUnit: valueOf('f35-land-unit', 'shutoLand'),
+    buildUnit: valueOf('f35-land-unit', 'shutoBuild'),
+    site: valueOf('f35-region', 'shutoSite'),
+  },
+];
+const grades = [{ id: 'energy', name: '省エネ基準適合', limit: valueOf('tax-loan-limit', 'energy'), note: '' }];
+const initialTotal = Math.round(valueOf('f35-region', 'shutoConstruction') + valueOf('f35-region', 'shutoLand'));
+const title = 'HOUSE NOTE';
+---
+
+<BaseLayout>
+  <section class="cover wrap">
+    <svg class="logo-draw" viewBox="0 0 120 100" aria-hidden="true">
+      <path class="ln lg" pathLength="1" d="M10 50 L60 10 L110 50" />
+      <path class="ln lg" pathLength="1" d="M20 42 V92 H100 V42" />
+      <path class="ln-accent lg" pathLength="1" d="M52 92 V66 H68 V92" />
+      <path class="ln lg" pathLength="1" d="M30 58 H44 V72 H30 Z M76 58 H90 V72 H76 Z" />
+    </svg>
+    <h1 class="site-title" aria-label={title}>
+      {[...title].map((ch, i) => <span aria-hidden="true" style={`--i:${i}`}>{ch === ' ' ? ' ' : ch}</span>)}
+    </h1>
+    <p class="catch">家を選ぶ前に、図で読む。</p>
+    <p class="intro measure">
+      住宅購入（主に新築一戸建て・注文住宅）を検討する人のための図解サイトです。土地と建物のトレードオフ、木造と鉄骨の違い、住宅性能、住宅会社の選び方まで。数値にはすべて出典と時点を付けています。
+    </p>
+  </section>
+
+  <section class="wrap teaser" aria-labelledby="teaser-title">
+    <h2 id="teaser-title">総予算の帯を動かしてみる</h2>
+    <p class="mute">
+      首都圏の土地付注文住宅の平均（建設費＋土地取得費）から始めています<Fact id="f35-region" text="" /><Fact id="f35-land-unit" text="" />。敷地を広げると、建物に回せる額と延床が縮みます。くわしくは04章へ。
+    </p>
+    <BudgetBalance client:visible regions={regions} grades={grades} initialTotal={initialTotal} compact />
+  </section>
+
+  <section class="wrap toc" aria-labelledby="toc-title">
+    <h2 id="toc-title">目次</h2>
+    <ol>
+      {
+        CHAPTERS.map((c) => (
+          <li>
+            <a href={chapterHref(c.slug)}>
+              <span class="num">{c.num}</span>
+              <svg class="icon" viewBox="0 0 48 48" aria-hidden="true">
+                <path class="ln" d={ICONS[c.num]} />
+              </svg>
+              <span class="t">
+                <span class="title">{c.title}</span>
+                <span class="q">{c.question}</span>
+              </span>
+              <span class="arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <div class="wrap">
+    <SourceList />
+  </div>
+</BaseLayout>
+
+<style>
+  .cover {
+    padding-top: clamp(3rem, 9vw, 7rem);
+    padding-bottom: 2rem;
+  }
+
+  .logo-draw {
+    width: clamp(90px, 16vw, 140px);
+    height: auto;
+    display: block;
+  }
+
+  .lg {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    animation: draw 1.8s var(--ease-out) both;
+  }
+
+  .lg:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+
+  .lg:nth-child(3) {
+    animation-delay: 0.7s;
+  }
+
+  .lg:nth-child(4) {
+    animation-delay: 0.9s;
+  }
+
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .site-title {
+    font-size: clamp(2.6rem, 1.6rem + 6vw, 5.6rem);
+    letter-spacing: 0.12em;
+    line-height: 1.1;
+    margin: 1.5rem 0 0.8rem;
+    overflow: hidden;
+  }
+
+  .site-title span {
+    display: inline-block;
+    animation: rise 0.9s var(--ease-out) both;
+    animation-delay: calc(0.6s + var(--i) * 0.05s);
+  }
+
+  @keyframes rise {
+    from {
+      transform: translateY(105%);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  .catch {
+    font-size: clamp(1.2rem, 1rem + 1vw, 1.6rem);
+    font-weight: 800;
+    border-left: 3px solid var(--accent);
+    padding-left: 0.9rem;
+  }
+
+  .intro {
+    color: var(--mute);
+  }
+
+  .teaser {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--ink);
+  }
+
+  .teaser h2,
+  .toc h2 {
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+  }
+
+  .teaser > p {
+    font-size: 0.9rem;
+    max-width: 44em;
+  }
+
+  .toc {
+    margin-top: 4rem;
+  }
+
+  .toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1.5px solid var(--ink);
+  }
+
+  .toc a {
+    display: grid;
+    grid-template-columns: 3.2rem 48px minmax(0, 1fr) 2rem;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.2rem 0.4rem;
+    border-bottom: 1px solid var(--rule);
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .toc a:hover {
+    background: var(--paper-deep);
+    color: inherit;
+  }
+
+  .num {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .title {
+    display: block;
+    font-weight: 800;
+    font-size: 1.15rem;
+  }
+
+  .q {
+    display: block;
+    color: var(--mute);
+    font-size: 0.9rem;
+  }
+
+  .arrow {
+    color: var(--accent);
+    transition: transform 0.2s;
+  }
+
+  .toc a:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 520px) {
+    .toc a {
+      grid-template-columns: 2.4rem minmax(0, 1fr) 1.2rem;
+    }
+    .icon {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lg,
+    .site-title span {
+      animation: none;
+    }
+  }
+</style>

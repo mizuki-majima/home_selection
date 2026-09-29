@@ -1,0 +1,183 @@
+# 01 住まいの選択肢と流れ
+- id: f35-2025-chumon-tochi
+  claim: 土地付注文住宅（全国、n=7,733）の所要資金・世帯年収など
+  values: { total: 5312.9, construction: 3737.6, land: 1575.3, income: 742.2, ratio: 7.8, burden: 26.4, cash: 481.1, area: 110.3, monthly: 15.23, n: 7733 }
+  asOf: 2025年度（2026年7月公表）
+  source: &f35
+    title: 2025年度 フラット35利用者調査
+    publisher: 住宅金融支援機構
+    url: https://www.jhf.go.jp/files/topics/4941_ext_99_1.pdf
+    type: primary
+  volatility: annual
+  note: 全期間固定のフラット35利用者だけの集計
+
+- id: f35-2025-tateuri
+  claim: 建売住宅（n=8,345）の購入価額・世帯年収など
+  values: { total: 4214.8, income: 680.0, ratio: 6.9, burden: 23.9, cash: 428.8, area: 100.4, monthly: 12.57, n: 8345 }
+  asOf: 2025年度（2026年7月公表）
+  source: *f35
+  volatility: annual
+
+- id: f35-2025-mansion
+  claim: マンション（n=2,823）の購入価額・世帯年収など
+  values: { total: 5881.5, income: 1040.6, ratio: 7.5, burden: 21.5, cash: 1379.3, area: 67.7, monthly: 15.80, n: 2823 }
+  asOf: 2025年度（2026年7月公表）
+  source: *f35
+  volatility: annual
+
+- id: f35-2025-chumon
+  claim: 注文住宅（土地の取得費を借りていない。n=3,889）の建設費・住宅面積など
+  values: { total: 4259.8, area: 118.4, cash: 839.8, burden: 23.0, n: 3889 }
+  asOf: 2025年度（2026年7月公表）
+  source: *f35
+  volatility: annual
+
+- id: f35-2025-used
+  claim: 中古戸建の購入価額（築後22.7年）、中古マンションの購入価額（築後28.7年）
+  values: { house: 2782.5, houseAge: 22.7, mansion: 3601.7, mansionAge: 28.7 }
+  asOf: 2025年度（2026年7月公表）
+  source: *f35
+  volatility: annual
+
+- id: mlit-shijo-r7-price
+  claim: 住宅市場動向調査の購入資金の平均と中央値（注文は全国、ほかは三大都市圏）
+  values:
+    chumonMean: 7646
+    chumonMedian: 5100
+    bunjoMean: 5099
+    bunjoMedian: 4600
+    mansionMean: 6443
+    mansionMedian: 5500
+    usedHouseMean: 2966
+    usedHouseMedian: 2650
+    usedMansionMean: 3321
+    usedMansionMedian: 2750
+  asOf: 令和7年度調査（2026年7月公表）
+  source: &shijo
+    title: 令和7年度 住宅市場動向調査
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/report/press/content/002012180.pdf
+    type: primary
+  volatility: annual
+  note: 注文住宅は「土地を購入して注文住宅を新築」した世帯
+
+- id: mlit-shijo-r7-selffund
+  claim: 購入資金に占める自己資金の比率
+  values: { chumon: 30.1, bunjo: 26.7, mansion: 39.9, usedHouse: 38.1, usedMansion: 40.0 }
+  asOf: 令和7年度調査（2026年7月公表）
+  source: *shijo
+  volatility: annual
+
+- id: mlit-shijo-r7-burden
+  claim: 返済負担率（注文住宅は建替えを含む注文住宅全体の値）
+  values: { chumon: 18.1, bunjo: 20.6, mansion: 17.7, usedHouse: 16.7, usedMansion: 17.0 }
+  asOf: 令和7年度調査（2026年7月公表）
+  source: *shijo
+  volatility: annual
+
+- id: mlit-shijo-r7-compare
+  claim: 注文住宅を建てた世帯の51.4%が新築の分譲戸建と比較検討し、他の種類を検討していない世帯は41.6%
+  values: { bunjo: 51.4, none: 41.6 }
+  asOf: 令和7年度調査（2026年7月公表）
+  source: *shijo
+  volatility: annual
+
+- id: judanren-2024-period
+  claim: 業界団体調査（2,435件のうち94.6%が会員企業、記入は営業担当者）の期間分布
+  values: { contactUnder2m: 34.5, contractToStart6m: 69.4, contractToStart6to12m: 21.1, landToComplete2y: 92.6, contactUnder3m: 72.2 }
+  asOf: 2024年度調査
+  source: &judanren
+    title: 2024年度 戸建注文住宅の顧客実態調査
+    publisher: 住宅生産団体連合会
+    url: https://www.judanren.or.jp/activity/proposal-activity/report03/pdf/kousatu2024.pdf
+    type: primary
+  volatility: annual
+  note: 大手中心の調査で、記入は顧客ではなく営業担当者
+
+- id: law-kijunho-review
+  claim: 建築確認の審査期間（2階以上か200㎡超は受理から35日以内）と完了検査（完了から4日以内に申請、受理から7日以内に検査）
+  values: { reviewDays: 35, completeApply: 4, inspectDays: 7 }
+  asOf: 現行法令
+  source: &kijunho
+    title: 建築基準法
+    publisher: e-Gov法令検索
+    url: https://laws.e-gov.go.jp/law/325AC0000000201
+    type: primary
+  volatility: stable
+
+- id: f35-flow
+  claim: フラット35の流れ（申込み → 審査 → 適合証明書の提出 → 借入れの契約 → 資金の受取り）。借入金利は資金受取時に確定する
+  asOf: 2026年4月現在の資料
+  source: &f35guide
+    title: フラット35 利用者向け資料（2026年4月現在）
+    publisher: 住宅金融支援機構
+    url: https://www.flat35.com/files/topics/6167_ext_99_1.pdf
+    type: primary
+  volatility: stable
+
+- id: f35-bridge-loan
+  claim: つなぎ融資は住宅ローン資金の受取前に金融機関が提供するローン。融資手数料の目安は定額型3〜5万円程度、定率型で借入額の1〜2%程度
+  asOf: 2026年4月現在の資料
+  source: *f35guide
+  volatility: annual
+
+- id: suumo-payment-split
+  claim: 建物代の支払い割合の目安（契約時約10%・着工時約30%・上棟時約30%・引渡し前約30%）。土地の手付金は5〜10%、諸費用は土地代と工事費の合計の6〜10%
+  values: { contract: 10, start: 30, framing: 30, handover: 30 }
+  asOf: 2025年9月1日更新
+  source:
+    title: 注文住宅の支払いタイミング（一級建築士監修記事）
+    publisher: 民間住宅情報メディア
+    url: https://suumo.jp/article/oyakudachi/oyaku/chumon/c_knowhow/jukatsu-loankeiyaku/
+    type: secondary
+  volatility: stable
+  note: 二次情報の目安。実際の支払いは請負契約書による
+
+- id: law-takken-39
+  claim: 宅建業者が自ら売主の売買では、手付は代金の2割まで。相手方が履行に着手するまでは手付解除ができる
+  values: { cap: 20 }
+  asOf: 現行法令（2026年4月1日施行版）
+  source: &takken
+    title: 宅地建物取引業法
+    publisher: e-Gov法令検索
+    url: https://laws.e-gov.go.jp/law/327AC1000000176
+    type: primary
+  volatility: stable
+
+- id: law-takken-41
+  claim: 手付金等の保全措置。未完成物件は5%以下かつ1,000万円以下、完成物件は10%以下かつ1,000万円以下なら不要
+  asOf: 現行法令（2026年4月1日施行版）
+  source: *takken
+  volatility: stable
+
+- id: mlit-literacy-costs
+  claim: 住宅購入時の諸費用（仲介手数料の上限、融資事務手数料、保証料など）
+  asOf: 2026年9月29日閲覧
+  source:
+    title: 住まいの購入に関する費用
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/sumai_literacy_pf/knowledge02/0005/
+    type: primary
+  volatility: annual
+
+- id: mansion-survey-r5
+  claim: マンションの管理費・修繕積立金（1戸あたり月額。駐車場使用料等からの充当を含む額／除く額）
+  values: { mgmt: 17103, mgmtEx: 11503, repair: 13378, repairEx: 13054 }
+  unit: 円/月
+  asOf: 令和5年度調査
+  source:
+    title: 令和5年度 マンション総合調査
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/jutakukentiku/house/content/001750161.pdf
+    type: primary
+  volatility: annual
+
+- id: jhf-maintenance
+  claim: 木造戸建ての維持管理の目安（外壁の窯業系サイディング15〜20年、給湯器10年位 など）
+  asOf: 資料の作成年は記載なし
+  source: &jhfmaint
+    title: 住まいの維持管理の目安
+    publisher: 住宅金融支援機構
+    url: https://www.jhf.go.jp/files/a/public/jhf/300237187.pdf
+    type: primary
+  volatility: stable

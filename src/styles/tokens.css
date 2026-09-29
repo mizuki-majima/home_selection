@@ -1,0 +1,23 @@
+:root {
+  --paper: #f4f1ea;
+  --paper-deep: #ebe6da;
+  --ink: #1a1a1a;
+  /* テラコッタ。文字にも使うため、生成り地とのコントラスト比 AA（4.5:1）を満たす濃さにしている */
+  --accent: #a3462f;
+  --accent-soft: #e9cfc4;
+  --mute: #5f5a50;
+  --rule: #cfc8b8;
+  --hatch: #d9d2c2;
+
+  --font-serif: 'Shippori Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', 'YuMincho', serif;
+  --text-body: clamp(16px, 1.05rem + 0.15vw, 18px);
+  --leading: 1.9;
+  --measure: 38em;
+  --wide: 1080px;
+  --gutter: clamp(16px, 4vw, 40px);
+
+  --line: 1.25px;
+  --line-strong: 1.7px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}

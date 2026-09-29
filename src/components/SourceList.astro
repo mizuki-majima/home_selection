@@ -1,0 +1,71 @@
+---
+import { registryOf } from '../lib/sources';
+
+const entries = registryOf(Astro.locals).entries();
+---
+
+{
+  entries.length > 0 && (
+    <section class="sources" aria-labelledby="sources-title">
+      <h2 id="sources-title">出典</h2>
+      <ol>
+        {entries.map((e) => (
+          <li id={`src-${e.n}`}>
+            <span class="n">[{e.n}]</span>
+            <span>
+              {e.source.publisher}「{e.source.title}」
+              <span class="mute">（{[...e.asOf].join('／')}）</span>
+              {e.source.type === 'secondary' && <span class="badge">二次情報</span>}
+              <br />
+              <a href={e.source.url} rel="noopener" target="_blank">
+                {e.source.url}
+              </a>
+            </span>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )
+}
+
+<style>
+  .sources {
+    margin-top: 5rem;
+    padding-top: 1.5rem;
+    border-top: 1.5px solid var(--ink);
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+
+  .sources h2 {
+    font-size: 1.1rem;
+  }
+
+  ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 2.6em 1fr;
+    gap: 0.5rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--rule);
+    scroll-margin-top: 80px;
+  }
+
+  li:target {
+    background: var(--accent-soft);
+  }
+
+  .n {
+    color: var(--accent);
+  }
+
+  a {
+    word-break: break-all;
+    color: var(--mute);
+  }
+</style>

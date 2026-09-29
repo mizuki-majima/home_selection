@@ -1,0 +1,27 @@
+---
+// 用語にその場で開ける説明を付ける（popover。文中に置いても HTML が壊れない）
+import { GLOSSARY } from '../data/glossary';
+import { uid } from '../lib/uid';
+
+interface Props {
+  k: keyof typeof GLOSSARY;
+}
+const { k } = Astro.props;
+const entry = GLOSSARY[k];
+if (!entry) throw new Error(`用語集にありません: ${String(k)}`);
+const label = Astro.slots.has('default') ? await Astro.slots.render('default') : entry.term;
+const id = uid(Astro.locals, 'term');
+---
+
+<button type="button" class="term" popovertarget={id}><Fragment set:html={label} /></button><span
+  popover
+  id={id}
+  class="pop"
+  role="note"
+  ><strong class="pop-title">{entry.term}</strong><span class="pop-body">{entry.body}</span><button
+    type="button"
+    class="pop-close"
+    popovertarget={id}
+    popovertargetaction="hide">閉じる</button
+  ></span
+>

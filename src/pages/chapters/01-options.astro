@@ -1,0 +1,162 @@
+---
+import ChapterLayout from '../../layouts/ChapterLayout.astro';
+import Figure from '../../components/Figure.astro';
+import Fact from '../../components/Fact.astro';
+import Term from '../../components/Term.astro';
+import Fig1_1Types from '../../diagrams/01-options/Fig1_1Types.astro';
+import Fig1_2Timeline from '../../diagrams/01-options/Fig1_2Timeline.astro';
+import { valueOf } from '../../lib/facts';
+
+const period = [
+  { label: '初回接触から契約まで2か月未満（最多）', v: valueOf('judanren-2024-period', 'contactUnder2m') },
+  { label: '契約から着工まで6か月以内', v: valueOf('judanren-2024-period', 'contractToStart6m') },
+  { label: '土地購入から竣工まで2年以内', v: valueOf('judanren-2024-period', 'landToComplete2y') },
+];
+---
+
+<ChapterLayout slug="01-options">
+  <ol slot="points">
+    <li>
+      <strong>同じ「新築」でも、払う額と払い方が違う。</strong>
+      フラット35利用者（2025年度・全国平均）では、土地付注文住宅が所要資金<Fact id="f35-2025-chumon-tochi" k="total" unit="万円" bare />・年収倍率<Fact id="f35-2025-chumon-tochi" k="ratio" unit="倍" bare />・<Term k="totalBurden" /><Fact id="f35-2025-chumon-tochi" k="burden" unit="%" />。ただし国交省の住宅市場動向調査では、<Term k="burden" />が最も高いのは分譲戸建（<Fact id="mlit-shijo-r7-burden" k="bunjo" unit="%" />）。調査によって定義も対象も違い、順位も入れ替わります。1つの数字で住宅タイプの良し悪しを決めないこと。
+    </li>
+    <li>
+      <strong>注文住宅は工程が多く、時間がかかる。</strong>
+      業界団体の調査（大手中心、記入は営業担当者）では、土地の購入から竣工まで2年以内が<Fact id="judanren-2024-period" k="landToComplete2y" unit="%" bare />、契約から着工まで6か月以内が<Fact id="judanren-2024-period" k="contractToStart6m" unit="%" />。建売住宅や完成済みのマンションは、現物を見てから売買契約を結び、決済と同時に引渡しを受けます。
+    </li>
+    <li>
+      <strong>注文住宅は、完成前から何度もお金を払う。</strong>
+      民間の目安では、建物代を契約時・着工時・上棟時・引渡し前に約10／30／30／30%ずつ払います<Fact id="suumo-payment-split" text="" />。一方、フラット35は「適合証明書の提出 → 借入れの契約 → 資金の受取り」の順で、借入金利も資金を受け取る時点で確定します<Fact id="f35-flow" text="" />。それまでの支払いは自己資金か、つなぎ融資などでまかないます。
+    </li>
+    <li>
+      <strong>手付金のルールは「宅建業者が売主の売買」に適用される。</strong>
+      手付は代金の2割まで。相手方が契約の履行に着手するまでは、手付を放棄すれば解除できます<Fact id="law-takken-39" text="" />。一定額を超える手付金等には、売主に保全措置が義務付けられています<Fact id="law-takken-41" text="" />。土地の売買部分はこの対象ですが、建物の工事請負契約は売買ではないため対象外です。
+    </li>
+    <li>
+      <strong>住んでからの費用も形が違う。</strong>
+      マンションは管理費と修繕積立金を毎月払います（平均で管理費<Fact id="mansion-survey-r5" k="mgmt" unit="円" bare />・修繕積立金<Fact id="mansion-survey-r5" k="repair" unit="円" />／月。駐車場使用料等からの充当を除くと<Fact id="mansion-survey-r5" k="mgmtEx" unit="円" bare />・<Fact id="mansion-survey-r5" k="repairEx" unit="円" bare />）。戸建てには決まった積立がない代わりに、修繕の計画も積立も自分でやります（目安：給湯器10年位、窯業系サイディングの外壁15〜20年位<Fact id="jhf-maintenance" text="" />）。
+    </li>
+  </ol>
+
+  <h2 class="sec">図で見る</h2>
+
+  <Figure
+    num="1-1"
+    title="新築3タイプを数字で並べる"
+    kind="static"
+    point="●評価ではなく統計の数値だけで並べる。調査が違う数値は同じ軸に置かない。"
+    facts={['f35-2025-chumon-tochi', 'mlit-shijo-r7-price']}
+  >
+    <Fig1_1Types />
+    <Fragment slot="notes">
+      <p>フラット35利用者調査は全期間固定の利用者だけの集計で、変動金利の利用者は含みません。平均は高額な例に引っぱられるため、中央値もあわせて見ます（<Term k="median" />）。</p>
+    </Fragment>
+  </Figure>
+
+  <Figure
+    num="1-2"
+    title="家とお金の時間軸"
+    kind="scroll"
+    point="注文住宅は、支払いが先に何度も来て、住宅ローンの資金が入るのは最後。その間は自己資金かつなぎ融資でしのぐ。"
+    facts={['suumo-payment-split', 'f35-flow', 'law-kijunho-review', 'judanren-2024-period']}
+  >
+    <Fig1_2Timeline />
+    <div class="hist">
+      <p class="hist-title">期間の分布（業界団体調査・大手中心、記入は営業担当者）<Fact id="judanren-2024-period" text="" /></p>
+      {
+        period.map((p) => (
+          <div class="hist-row">
+            <span class="hl">{p.label}</span>
+            <span class="hb" aria-hidden="true">
+              <span style={`width:${p.v}%`} />
+            </span>
+            <span class="hv">{p.v}%</span>
+          </div>
+        ))
+      }
+    </div>
+  </Figure>
+
+  <h2 class="sec">よくある誤解</h2>
+  <ul class="myths">
+    <li>
+      <p class="myth">ローンが通れば、完成までお金は要らない</p>
+      <p class="truth">フラット35の資金を受け取れるのは竣工後の手続きの後。金利もそのとき確定するため、完成までに金利が上がれば返済額も増えます。</p>
+    </li>
+    <li>
+      <p class="myth">手付金を払えば、いつでも手付放棄で解約できる</p>
+      <p class="truth">手付解除ができるのは、相手方が契約の履行に着手するまでです。</p>
+    </li>
+    <li>
+      <p class="myth">手付金は保全されるから安心</p>
+      <p class="truth">保全措置の義務は、宅建業者が売主の売買で、一定額を超える場合に限られます。注文住宅の請負代金は対象外です。</p>
+    </li>
+    <li>
+      <p class="myth">戸建ては管理費がないから維持費が安い</p>
+      <p class="truth">毎月の積立がないだけで、更新費用は自分で準備します。</p>
+    </li>
+    <li>
+      <p class="myth">平均額が相場</p>
+      <p class="truth">土地を購入して注文住宅を建てた世帯の購入資金は、平均<Fact id="mlit-shijo-r7-price" k="chumonMean" unit="万円" bare />に対し中央値<Fact id="mlit-shijo-r7-price" k="chumonMedian" unit="万円" />。</p>
+    </li>
+    <li>
+      <p class="myth">年収倍率○倍までなら安全という公的な基準がある</p>
+      <p class="truth">公的な“適正倍率”は確認できませんでした。調査からわかるのは実際の平均値だけです。</p>
+    </li>
+  </ul>
+
+  <h2 class="sec">注意書き</h2>
+  <ul class="notes">
+    <li>二つの調査は対象期間も地域も定義も違うため、同じ軸に並べていません。</li>
+    <li>建物代の支払割合は民間の目安（二次情報）で、法律の定めではありません。</li>
+    <li>「業界団体調査」は大手中心で、記入者は顧客ではなく営業担当者です。</li>
+    <li>仲介手数料・融資手数料・保証料・登記費用など、購入時の諸費用の種類は国交省の案内にまとまっています<Fact id="mlit-literacy-costs" text="" />。</li>
+  </ul>
+</ChapterLayout>
+
+<style>
+  .hist {
+    margin-top: 2rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .hist-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .hist-row {
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) 3.5rem;
+    gap: 0.8rem;
+    align-items: center;
+    font-size: 0.82rem;
+    min-height: 30px;
+  }
+
+  .hb {
+    height: 10px;
+    background: var(--paper-deep);
+  }
+
+  .hb span {
+    display: block;
+    height: 100%;
+    background: var(--ink);
+  }
+
+  .hv {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  @media (max-width: 600px) {
+    .hist-row {
+      grid-template-columns: minmax(0, 1fr) 3.5rem;
+    }
+    .hl {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

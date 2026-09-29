@@ -1,0 +1,110 @@
+# 04 土地×建物のトレードオフ
+- id: f35-region
+  claim: 土地付注文住宅の地域別（首都圏・近畿圏・東海圏・その他地域）。建設費・土地取得費（万円）、住宅面積・敷地面積の中央値（㎡）
+  values:
+    shutoConstruction: 3814.3
+    shutoLand: 2590.0
+    shutoArea: 109.4
+    shutoSite: 152.6
+    kinkiConstruction: 3601.7
+    kinkiLand: 1884.3
+    kinkiArea: 110.6
+    kinkiSite: 159.5
+    tokaiConstruction: 3871.1
+    tokaiLand: 1453.5
+    tokaiArea: 113.0
+    tokaiSite: 211.9
+    otherConstruction: 3734.3
+    otherLand: 1016.5
+    otherArea: 110.0
+    otherSite: 247.2
+  asOf: 2025年度（2026年7月公表）
+  source: &f35
+    title: 2025年度 フラット35利用者調査
+    publisher: 住宅金融支援機構
+    url: https://www.jhf.go.jp/files/topics/4941_ext_99_1.pdf
+    type: primary
+  volatility: annual
+  note: 全期間固定のフラット35利用者だけの集計
+
+- id: f35-land-share
+  claim: 所要資金に占める土地取得費の割合
+  values: { other: 21, tokai: 27, kinki: 34, shuto: 40 }
+  unit: '%'
+  asOf: 2025年度（2026年7月公表）
+  source: *f35
+  volatility: annual
+  derived:
+    formula: 土地取得費 ÷（建設費＋土地取得費）
+    from: [f35-region]
+
+- id: f35-tokyo-distance
+  claim: 東京圏の距離帯別の所要資金（旧都庁から10km未満はn=67）
+  values: { under10: 10332.7, km60to70: 4674.3, n10: 67 }
+  asOf: 2025年度（2026年7月公表）
+  source: &f35x
+    title: 2025年度 フラット35利用者調査 集計表
+    publisher: 住宅金融支援機構
+    url: https://www.jhf.go.jp/files/topics/8510_ext_99_3.xlsx
+    type: primary
+  volatility: annual
+
+- id: f35-median
+  claim: 土地付注文住宅の所要資金の平均と中央値
+  values: { mean: 5312.9, median: 4884 }
+  asOf: 2025年度（2026年7月公表）
+  source: *f35x
+  volatility: annual
+
+- id: chika-2026
+  claim: 令和8年都道府県地価調査（住宅地）の変動率。全国+1.0%、東京23区+8.7%、徳島県−1.2%
+  values: { national: 1.0, tokyo23: 8.7, tokushima: -1.2, tokyoArea: 4.0, other: 0.0 }
+  asOf: 2026年7月1日時点
+  source:
+    title: 令和8年 都道府県地価調査の概要
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/totikensangyo/content/002021832.pdf
+    type: primary
+  volatility: annual
+
+- id: mlit-2013-zero-value
+  claim: 建物の状態にかかわらず、築20〜25年で市場価値を一律ゼロとする慣行がある（2013年の国交省資料による指摘）
+  asOf: 2013年8月
+  source: &mlit2013
+    title: 中古住宅の流通促進・活用に関する資料（2013年8月）
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/common/001011879.pdf
+    type: primary
+  volatility: stable
+
+- id: energy-bill-zeh
+  claim: 年間光熱費の試算。東京23区等で23.9万円 → ZEH水準19.3万円（年4.6万円減）。単価は令和4年11月時点
+  values: { base: 23.9, zeh: 19.3, diff: 4.6 }
+  unit: 万円/年
+  asOf: 令和4年11月の単価
+  source:
+    title: 省エネ住宅の経済的メリット（光熱費）
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/shoene-jutaku/economic-benefits/energy-bills/index.html
+    type: primary
+  volatility: annual
+
+- id: f35-land-unit
+  claim: 地域別の土地単価と建物単価の目安（土地取得費÷敷地面積の中央値、建設費÷住宅面積）
+  values:
+    shutoLand: 16.97
+    kinkiLand: 11.81
+    tokaiLand: 6.86
+    otherLand: 4.11
+    shutoBuild: 34.87
+    kinkiBuild: 32.57
+    tokaiBuild: 34.26
+    otherBuild: 33.95
+  unit: 万円/㎡
+  asOf: 2025年度（2026年7月公表）
+  source: *f35
+  volatility: annual
+  derived:
+    formula: 土地＝土地取得費（平均）÷ 敷地面積（中央値）、建物＝建設費（平均）÷ 住宅面積（平均）
+    from: [f35-region]
+  note: 平均と中央値を組み合わせた概算。実際の単価は立地で大きく変わる

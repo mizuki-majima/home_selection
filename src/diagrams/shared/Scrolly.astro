@@ -1,0 +1,135 @@
+---
+// スクロールで展開する図の共通枠。
+// JS 無効・reduced-motion では完成形の図と手順のリストをそのまま表示する。
+// JS 有効時は図を画面に固定し、手順ごとに [data-step] の要素を描き足していく。
+interface Props {
+  label: string;
+  /** 1段ごとにステージを切り替える（05章の分解アクソメ用） */
+  mode?: 'build' | 'swap';
+}
+const { label, mode = 'build' } = Astro.props;
+---
+
+<div class="scrolly" data-scrolly data-mode={mode}>
+  <div class="scrolly-stage" role="group" aria-label={label}>
+    <slot name="stage" />
+  </div>
+  <ol class="scrolly-steps">
+    <slot />
+  </ol>
+</div>
+
+<script>
+  import { initAllScrolly } from './scrolly';
+  document.addEventListener('astro:page-load', initAllScrolly);
+</script>
+
+<style>
+  .scrolly {
+    position: relative;
+  }
+
+  .scrolly-stage {
+    background: var(--paper);
+  }
+
+  .scrolly-steps {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    counter-reset: step;
+  }
+
+  .scrolly-steps > :global(li) {
+    counter-increment: step;
+    position: relative;
+    padding: 0.9rem 0 0.9rem 2.6rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .scrolly-steps > :global(li::before) {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.85rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+
+  .scrolly-steps > :global(li h4) {
+    margin: 0 0 0.3rem;
+    font-size: 1.02rem;
+  }
+
+  .scrolly-steps > :global(li p) {
+    margin: 0 0 0.4rem;
+    font-size: 0.95rem;
+  }
+
+  /* JS 有効時：図を固定し、手順を横で流す */
+  .scrolly:global(.is-live) {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 0 2.5rem;
+    align-items: start;
+  }
+
+  .scrolly:global(.is-live) .scrolly-stage {
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 80px);
+    height: calc(100svh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  .scrolly:global(.is-live) .scrolly-steps {
+    margin: 0;
+    padding: 30vh 0 40vh;
+  }
+
+  /* 読んでいない段は墨を薄く（コントラスト AA を保つため透明度ではなく色で） */
+  .scrolly:global(.is-live) .scrolly-steps > :global(li) {
+    min-height: 70vh;
+    border-top: 0;
+    color: var(--mute);
+    transition: color 0.35s;
+  }
+
+  .scrolly:global(.is-live) .scrolly-steps > :global(li.is-active) {
+    color: var(--ink);
+  }
+
+  @media (max-width: 760px) {
+    .scrolly:global(.is-live) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* スマホ：図を上に固定し、手順はその下を流れる */
+    .scrolly:global(.is-live) .scrolly-stage {
+      top: 56px;
+      height: 48vh;
+      height: 48svh;
+      border-bottom: 1px solid var(--rule);
+      z-index: 3;
+    }
+
+    .scrolly:global(.is-live) .scrolly-steps {
+      padding: 6vh 0 30vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    .scrolly:global(.is-live) .scrolly-steps > :global(li) {
+      min-height: 50vh;
+    }
+  }
+</style>
