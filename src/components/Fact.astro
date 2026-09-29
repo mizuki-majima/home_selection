@@ -1,0 +1,65 @@
+---
+// 事実データから値を引いて表示し、ページの出典リストに登録する
+import { num, asOfLabel } from '../lib/format';
+import { registryOf } from '../lib/sources';
+import { uid } from '../lib/uid';
+
+interface Props {
+  id: string;
+  k?: string;
+  unit?: string;
+  digits?: number;
+  /** 値の代わりに表示する文字（出典番号だけ付けたいとき） */
+  text?: string;
+  /** 出典番号を出さない */
+  bare?: boolean;
+  /** 値に掛ける係数 */
+  scale?: number;
+}
+
+const { id, k, unit, digits, text, bare = false, scale = 1 } = Astro.props;
+const { n, fact } = registryOf(Astro.locals).register(id);
+
+let shown = text;
+if (shown === undefined) {
+  const raw = k === undefined ? fact.value : fact.values?.[k];
+  if (raw === undefined) throw new Error(`${id}${k ? `.${k}` : ''} に値がありません`);
+  if (typeof raw === 'number') {
+    const auto = String(raw).split('.')[1]?.length ?? 0;
+    shown = num(raw * scale, digits ?? auto);
+  } else {
+    shown = raw;
+  }
+  shown += unit ?? fact.unit ?? '';
+}
+const popId = fact.derived ? uid(Astro.locals, 'calc') : '';
+---
+
+<span class="fact"
+  >{shown}{fact.volatility === 'volatile' && <span class="asof">（{asOfLabel(fact.asOf)}）</span>}{
+    fact.derived && (
+      <>
+        <button type="button" class="badge-btn" popovertarget={popId}>
+          当方算出
+        </button>
+        <span popover id={popId} class="pop" role="note">
+          <strong class="pop-title">当方算出の値</strong>
+          <span class="pop-body">
+            出典の数値からこのサイトが計算しました。計算式：{fact.derived.formula}
+          </span>
+          <button type="button" class="pop-close" popovertarget={popId} popovertargetaction="hide">
+            閉じる
+          </button>
+        </span>
+      </>
+    )
+  }{
+    !bare && (
+      <sup class="src">
+        <a href={`#src-${n}`} aria-label={`出典${n}`}>
+          [{n}]
+        </a>
+      </sup>
+    )
+  }</span
+>

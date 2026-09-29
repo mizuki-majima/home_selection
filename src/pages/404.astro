@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/paths';
+---
+
+<BaseLayout title="ページが見つかりません">
+  <section class="wrap nf">
+    <svg viewBox="0 0 120 100" width="120" height="100" aria-hidden="true">
+      <path class="ln-draft" d="M10 50 L60 10 L110 50 M20 42 V92 H100 V42" />
+      <path class="ln-accent" d="M52 92 V66 H68 V92" />
+    </svg>
+    <h1>ページが見つかりません</h1>
+    <p>URLが変わったか、まだ建っていないページです。</p>
+    <p><a href={withBase()}>目次へ戻る</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    padding-top: 5rem;
+  }
+</style>

@@ -1,0 +1,246 @@
+---
+// 図2-3 性能で変わる支援の早見盤（減税のみ。補助金は仕組みと公式サイトの案内）
+import Fact from '../../components/Fact.astro';
+
+const cols = [
+  { key: 'longlife', name: '長期優良住宅・低炭素住宅' },
+  { key: 'zeh', name: 'ZEH水準省エネ住宅' },
+  { key: 'energy', name: '省エネ基準適合住宅' },
+];
+const YEARS = [2026, 2027, 2028, 2029, 2030];
+---
+
+<div class="board">
+  <div class="ribbon" role="img" aria-label="入居年2026〜2030年。省エネ基準適合住宅は2028年以降の入居で原則対象外（経過措置あり）">
+    <div class="ribbon-row head">
+      <span class="rl">入居年</span>
+      {YEARS.map((y) => <span class="yr">{y}</span>)}
+    </div>
+    {
+      cols.map((c) => (
+        <div class="ribbon-row">
+          <span class="rl">{c.name}</span>
+          {YEARS.map((y) =>
+            c.key === 'energy' && y >= 2028 ? (
+              <span class="cell off" title="原則対象外">
+                {y === 2028 ? '原則対象外※' : ''}
+              </span>
+            ) : (
+              <span class={`cell on ${c.key === 'energy' ? 'short' : ''}`} />
+            ),
+          )}
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="table-wrap" tabindex="0" role="region" aria-label="住宅ローン減税の早見表">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">新築の性能</th>
+          {cols.map((c) => <th scope="col">{c.name}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">借入限度額<small>（2026・27年入居）</small></th>
+          {cols.map((c) => (
+            <td>
+              <b><Fact id="tax-loan-limit" k={c.key} unit="万円" bare /></b>
+              <small>
+                子育て・若者夫婦世帯 <Fact id="tax-loan-limit" k={`${c.key}Family`} unit="万円" />
+              </small>
+            </td>
+          ))}
+        </tr>
+        <tr>
+          <th scope="row">1年あたりの最大控除額</th>
+          {cols.map((c) => (
+            <td>
+              <Fact id="tax-loan-max-credit" k={c.key} />
+            </td>
+          ))}
+        </tr>
+        <tr>
+          <th scope="row">控除期間</th>
+          {cols.map(() => (
+            <td>
+              <Fact id="tax-loan-limit" k="years" unit="年" bare />
+            </td>
+          ))}
+        </tr>
+        <tr>
+          <th scope="row">2028〜2030年の入居</th>
+          <td colspan="2">引き続き対象（限度額は国交省・国税庁のページで確認）<Fact id="tax-loan-reform-r8" text="" /></td>
+          <td class="accent-cell">
+            原則対象外。2027年末までに建築確認、または2028年6月30日までに建築したものは2,000万円×10年<Fact id="tax-loan-limit" text="" />
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">固定資産税の新築減額<small>（120㎡分まで1/2）</small></th>
+          <td colspan="3">
+            長期優良住宅は<Fact id="tax-property-newbuild" k="longlife" unit="年" bare />、それ以外の一般の住宅は<Fact id="tax-property-newbuild" k="general" unit="年" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="calc-note">
+    実際に控除される額は「年末残高×0.7%」「限度額×0.7%」「その年の所得税額（引ききれない分は住民税から上限9.75万円）」のうち最も小さい額です。2028年以降の入居では、災害レッドゾーン内の新築も対象外になります<Fact id="tax-loan-reform-r8" text="" />。
+  </p>
+
+  <div class="subsidy">
+    <p class="sub-title">補助金は、金額ではなく仕組みで見る</p>
+    <div class="eq" aria-label="補助額は性能と世帯と締切で決まる">
+      <span class="term-box">性能<small>GX志向型・長期優良・ZEH水準など</small></span>
+      <span class="op">×</span>
+      <span class="term-box">世帯<small>子育て・若者夫婦世帯かどうか</small></span>
+      <span class="op">×</span>
+      <span class="term-box">締切<small>予算がなくなりしだい終了</small></span>
+    </div>
+    <p>
+      補助金の金額と受付状況は日ごとに変わるため、このサイトには載せません。申請は多くの場合、登録された事業者（住宅会社）が行います。契約の前に、対象になるか・誰が申請するか・受付がいつまでかを依頼先に確認してください。
+    </p>
+    <ul class="links">
+      <li><a href="https://mirai-eco2026.mlit.go.jp/" target="_blank" rel="noopener">みらいエコ住宅2026事業（国土交通省）</a><Fact id="subsidy-mirai-eco" text="" /></li>
+      <li><a href="https://zehweb.jp/" target="_blank" rel="noopener">ZEH補助金（環境省・経済産業省の執行団体）</a><Fact id="subsidy-zeh" text="" /></li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  .ribbon {
+    display: grid;
+    gap: 4px;
+    margin-bottom: 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  .ribbon-row {
+    display: grid;
+    grid-template-columns: minmax(7rem, 1.6fr) repeat(5, minmax(0, 1fr));
+    gap: 4px;
+    align-items: center;
+  }
+
+  .ribbon-row.head .yr {
+    text-align: center;
+    color: var(--mute);
+  }
+
+  .rl {
+    font-size: 0.78rem;
+  }
+
+  .cell {
+    height: 18px;
+  }
+
+  .cell.on {
+    background: var(--ink);
+  }
+
+  .cell.off {
+    border: 1px dashed var(--accent);
+    color: var(--accent);
+    font-size: 0.7rem;
+    line-height: 16px;
+    padding-left: 4px;
+    white-space: nowrap;
+    overflow: visible;
+    height: 18px;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    min-width: 560px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  th,
+  td {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.7rem 0.6rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  thead th {
+    border-bottom: 1.5px solid var(--ink);
+    font-size: 0.85rem;
+  }
+
+  tbody th {
+    font-weight: 700;
+    font-size: 0.85rem;
+    width: 9.5rem;
+  }
+
+  small {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--mute);
+    font-weight: 500;
+  }
+
+  td b {
+    font-size: 1.2rem;
+  }
+
+  .accent-cell {
+    color: var(--accent);
+  }
+
+  .calc-note {
+    font-size: 0.85rem;
+    color: var(--mute);
+    margin-top: 1rem;
+  }
+
+  .subsidy {
+    margin-top: 2rem;
+    padding: 1.2rem;
+    border: 1px solid var(--ink);
+  }
+
+  .sub-title {
+    font-weight: 800;
+  }
+
+  .eq {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .term-box {
+    border: 1px solid var(--ink);
+    padding: 0.4rem 0.8rem;
+    font-weight: 700;
+  }
+
+  .op {
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  .links {
+    padding-left: 1.2rem;
+    margin: 0;
+  }
+
+  .links a {
+    display: inline-block;
+    min-height: 44px;
+    line-height: 44px;
+  }
+</style>

@@ -1,0 +1,93 @@
+---
+import ChapterLayout from '../../layouts/ChapterLayout.astro';
+import Figure from '../../components/Figure.astro';
+import Fact from '../../components/Fact.astro';
+import Fig5_1Frames from '../../diagrams/05-structure/Fig5_1Frames.astro';
+import Fig5_1Law from '../../diagrams/05-structure/Fig5_1Law.astro';
+import Fig5_3Quakes from '../../diagrams/05-structure/Fig5_3Quakes.astro';
+---
+
+<ChapterLayout slug="05-structure">
+  <ol slot="points">
+    <li>
+      <strong>持家一戸建ての約9割は木造。</strong>
+      2025年の持家一戸建て<Fact id="chakko-2025-mochiie" k="total" unit="戸" bare />のうち木造は約<Fact id="chakko-2025-mochiie" k="woodShare" unit="%" />。鉄骨造は約9%で、その約<Fact id="chakko-2025-prefab" />がプレハブ（工場で部材をつくる型式住宅）です。統計上、「鉄骨を選ぶ」ことは「プレハブ系の供給者を選ぶ」ことと重なりやすいと言えます。
+    </li>
+    <li>
+      <strong>単価の差は、構造材の値段の差ではない。</strong>
+      2025年の持家一戸建ての単価は木造<Fact id="chakko-2025-unit" k="wood" unit="万円/㎡" bare />、鉄骨造<Fact id="chakko-2025-unit" k="steel" unit="万円/㎡" bare />、RC造<Fact id="chakko-2025-unit" k="rc" unit="万円/㎡" />。工法別では木質プレハブ<Fact id="chakko-2025-unit" k="woodPrefab" unit="万円/㎡" bare />と鉄骨プレハブ<Fact id="chakko-2025-unit" k="steelPrefab" unit="万円/㎡" bare />が近く、ツーバイフォー<Fact id="chakko-2025-unit" k="twoByFour" unit="万円/㎡" bare />と在来木造<Fact id="chakko-2025-unit-conventional" bare />が近い。単価には仕様・規模・供給形態の差が混ざっています。
+    </li>
+    <li>
+      <strong>地震で被害を分けたのは、建てた時期・壁・接合部・耐震等級。</strong>
+      2000年以降の木造の倒壊率は、熊本（2016）で<Fact id="kumamoto-2016-era" k="new" />、能登（2024）で<Fact id="noto-2024-era" k="new" />。耐震等級を取得した住宅は、どちらの地震でもほぼ無被害でした（件数は16〜19棟と少ない）。
+    </li>
+    <li>
+      <strong>法定耐用年数は寿命ではない。</strong>
+      木造の<Fact id="law-taiyonensu" k="wood" bare />は減価償却のための年数です。国交省の資料では、木造専用住宅の平均寿命は<Fact id="mlit-lifespan" k="average" unit="年" />（2011年調査）とされています。
+    </li>
+    <li>
+      <strong>2025年4月から、木造2階建ても構造の審査対象に。</strong>
+      ただし木造で構造計算が法律上の義務になるのは、3階以上か延べ300㎡超だけ<Fact id="law-structural-calc" text="" />。2階建てでは「構造計算をするか」「耐震等級はいくつか」を依頼先に確かめる意味があります。
+    </li>
+  </ol>
+
+  <h2 class="sec">図で見る</h2>
+
+  <Figure
+    num="5-1"
+    title="骨組みを分解する"
+    kind="scroll"
+    point="骨組みの違いは「力の受け止め方」の違い。着工数・単価・耐用年数・構造計算の要否を同じ書式で並べ、●評価はしない。"
+    facts={['chakko-2025-mochiie', 'chakko-2025-unit', 'law-taiyonensu', 'law-structural-calc']}
+  >
+    <Fig5_1Frames />
+    <Fig5_1Law />
+    <Fragment slot="notes">
+      <p>単価は着工届の工事費予定額（持家一戸建て・居住専用）。土地代は含まず、付帯工事の範囲は会社で異なります。在来木造の単価は木造全体からプレハブとツーバイフォーを除いて当方で算出。</p>
+    </Fragment>
+  </Figure>
+
+  <Figure
+    num="5-3"
+    title="地震が教えたこと"
+    kind="static"
+    point="倒壊率は構造の種類より建築時期で大きく変わる。等級を取得した住宅の実績は件数が少ないことも一緒に見る。"
+    facts={['kumamoto-2016-era', 'noto-2024-era', 'noto-2024-structure', 'kumamoto-2026-wood']}
+  >
+    <Fig5_3Quakes />
+  </Figure>
+
+  <h2 class="sec">よくある誤解</h2>
+  <ul class="myths">
+    <li>
+      <p class="myth">鉄骨は木造より地震に強い</p>
+      <p class="truth">倒壊を分けたのは建築時期・壁の量と釣り合い・接合部・耐震等級でした。構造の種類だけでは決まりません。</p>
+    </li>
+    <li>
+      <p class="myth">法定耐用年数22年だから、木造は22年しか住めない</p>
+      <p class="truth">税の計算のための年数で、建物の寿命ではありません。</p>
+    </li>
+    <li>
+      <p class="myth">軽量鉄骨と重量鉄骨は6mmで法的に区分されている</p>
+      <p class="truth">耐用年数の区分は3mmと4mmが境目です。6mmの法令上の定義は確認できませんでした。</p>
+    </li>
+    <li>
+      <p class="myth">4号特例がなくなったので、2階建ても構造計算される</p>
+      <p class="truth">審査の対象にはなりましたが、木造で構造計算が義務になるのは3階以上か延べ300㎡超だけです。</p>
+    </li>
+    <li>
+      <p class="myth">坪単価の差は構造材の値段の差</p>
+      <p class="truth">統計の単価には、仕様・規模・供給形態の差が混ざっています。</p>
+    </li>
+    <li>
+      <p class="myth">鉄骨は熱橋があるので高断熱にできない</p>
+      <p class="truth">計算上は熱橋の補正が加わりますが、評価を受けた鉄骨プレハブにも断熱等級6以上は一定数あります。工法どうしの優劣ではなく「できる／できない」の話です。</p>
+    </li>
+  </ul>
+
+  <h2 class="sec">注意書き</h2>
+  <ul class="notes">
+    <li>住宅性能評価のデータは評価を受けた住宅（着工の一部で、大手の比率が高い）に限られます。工法別の比率を「構造の実力」として比べることはしません<Fact id="hyoka-2024-seismic" text="" />。</li>
+    <li>2026年の熊本の地震は速報段階の所見です。最終報告が出たら更新します。</li>
+  </ul>
+</ChapterLayout>

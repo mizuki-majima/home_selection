@@ -1,0 +1,169 @@
+# 05 木造・鉄骨（構造）
+- id: chakko-2025-total
+  claim: 2025年の新設住宅着工は740,667戸。木造433,974戸（58.6%）、RC造204,927戸（27.7%）、鉄骨造94,482戸（12.8%）
+  values: { total: 740667, wood: 433974, rc: 204927, steel: 94482 }
+  asOf: 2025年計
+  source:
+    title: 建築着工統計調査報告（令和7年計）
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/report/press/content/kencha25.pdf
+    type: primary
+  volatility: annual
+
+- id: chakko-2025-mochiie
+  claim: 持家一戸建て200,107戸のうち、木造179,976戸（約89.9%）、鉄骨造18,410戸、RC造1,370戸
+  values: { total: 200107, wood: 179976, steel: 18410, rc: 1370, woodShare: 89.9 }
+  asOf: 2025年計
+  source: &estat
+    title: 建築着工統計調査（e-Stat）
+    publisher: 国土交通省
+    url: https://www.e-stat.go.jp/stat-search/files?toukei=00600120
+    type: primary
+  volatility: annual
+
+- id: chakko-2025-unit
+  claim: 持家一戸建て（居住専用）の工事費予定額の単価。木造26.1万円/㎡、鉄骨造36.8万円/㎡、RC造40.7万円/㎡
+  values: { wood: 26.1, steel: 36.8, rc: 40.7, woodPrefab: 35.4, steelPrefab: 36.8, twoByFour: 26.6 }
+  unit: 万円/㎡
+  asOf: 2025年計
+  source: *estat
+  volatility: annual
+  note: 着工届の予定額。土地代は含まない。付帯工事の範囲は会社で異なる
+
+- id: chakko-2025-unit-conventional
+  claim: 在来木造（木造からプレハブとツーバイフォーを除いたもの）の単価
+  value: 25.6
+  unit: 万円/㎡
+  asOf: 2025年計
+  source: *estat
+  volatility: annual
+  derived:
+    formula: （木造の工事費予定額 − 木質プレハブ − ツーバイフォー）÷ 同じく除いた床面積
+    from: [chakko-2025-unit]
+
+- id: chakko-2025-prefab
+  claim: 持家一戸建ての鉄骨造のうちプレハブは約94%
+  value: 94
+  unit: '%'
+  asOf: 2025年計
+  source: *estat
+  volatility: annual
+
+- id: law-taiyonensu
+  claim: 法定耐用年数（住宅用）。木造22年、鉄骨は肉厚3mm以下19年・3〜4mm 27年・4mm超34年、RC47年。減価償却のための年数
+  values: { wood: 22, steelThin: 19, steelMid: 27, steelThick: 34, rc: 47 }
+  unit: 年
+  asOf: 現行法令（2026年5月22日施行版）
+  source:
+    title: 減価償却資産の耐用年数等に関する省令
+    publisher: e-Gov法令検索
+    url: https://laws.e-gov.go.jp/law/340M50000040015
+    type: primary
+  volatility: stable
+
+- id: mlit-lifespan
+  claim: 木造専用住宅の平均寿命は64年（2011年調査）。劣化対策等級2で50〜60年、等級3で75〜90年
+  values: { average: 64 }
+  asOf: 2013年8月
+  source:
+    title: 中古住宅の流通促進・活用に関する資料（2013年8月）
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/common/001011879.pdf
+    type: primary
+  volatility: stable
+
+- id: kumamoto-2016-era
+  claim: 熊本地震（2016）益城町の悉皆調査。木造の倒壊率は旧耐震28.2%、1981〜2000年8.7%、2000年以降2.2%。接合部の仕様不足が73棟で確認された
+  values: { old: 28.2, mid: 8.7, new: 2.2 }
+  unit: '%'
+  asOf: 2016年9月
+  source: &kumamoto
+    title: 熊本地震における建築物被害の原因分析を行う委員会 報告書
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/common/001155087.pdf
+    type: primary
+  volatility: stable
+
+- id: kumamoto-2016-steel
+  claim: 熊本地震（2016）で新耐震以降に倒壊した鉄骨造は、地盤・擁壁の崩壊、隣接建物の衝突、溶接不良などによる。RC造は新耐震以降の倒壊なし
+  asOf: 2016年9月
+  source: *kumamoto
+  volatility: stable
+
+- id: noto-2024-era
+  claim: 能登半島地震（2024）。木造の倒壊率は1981年以前19.4%、1981〜2000年5.4%、2000年以降0.7%（608棟中4棟）
+  values: { old: 19.4, mid: 5.4, new: 0.7 }
+  unit: '%'
+  asOf: 2025年12月
+  source: &noto
+    title: 能登半島地震における建築物構造被害の原因分析を行う委員会 報告書
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/report/press/content/001974606.pdf
+    type: primary
+  volatility: stable
+
+- id: noto-2024-structure
+  claim: 能登の構造別の倒壊率は木造14.5%、S造0.9%、RC造1.6%、混構造17.6%。年代別（全構造）は18.9%／4.7%／0.5%
+  values: { wood: 14.5, steel: 0.9, rc: 1.6, mixed: 17.6, eraOld: 18.9, eraMid: 4.7, eraNew: 0.5 }
+  unit: '%'
+  asOf: 2025年12月
+  source: *noto
+  volatility: stable
+
+- id: kumamoto-2026-wood
+  claim: 令和8年熊本地震（2026年7月28日）木造の速報。築45年超と推定される住宅の倒壊が多い。重い屋根と釘だけで留めた筋かい、正面に開口の多い店舗の倒壊も見られた。築年数が比較的浅い建物の多くは外観上大きな被害なし
+  asOf: 2026年8月31日速報
+  source:
+    title: 令和8年熊本地震 木造建築物の被害調査速報
+    publisher: 建築研究所
+    url: https://www.kenken.go.jp/japanese/contents/topics/2026/0831w.pdf
+    type: primary
+  volatility: volatile
+
+- id: kumamoto-2026-steel
+  claim: 同地震の鉄骨造等の速報。八代市で層崩壊した建物は1976年以前の建設と推定される
+  asOf: 2026年9月7日速報
+  source:
+    title: 令和8年熊本地震 鉄骨造等建築物の被害調査速報
+    publisher: 建築研究所
+    url: https://www.kenken.go.jp/japanese/contents/topics/2026/0907s.pdf
+    type: primary
+  volatility: volatile
+
+- id: law-2025-shin2go
+  claim: 2025年4月から、2階以上か延べ200㎡超の建物は「新2号建築物」となり、構造の審査が省略されなくなった（4号特例の縮小）
+  asOf: 2025年4月施行
+  source: &kijunho
+    title: 建築基準法
+    publisher: e-Gov法令検索
+    url: https://laws.e-gov.go.jp/law/325AC0000000201
+    type: primary
+  volatility: stable
+
+- id: law-structural-calc
+  claim: 構造計算が必要な規模。木造は3階以上か延べ300㎡超、木造以外は2階以上か延べ200㎡超（20条）
+  asOf: 現行法令
+  source: *kijunho
+  volatility: stable
+
+- id: mlit-2025-wall
+  claim: 壁量基準の見直し（「軽い屋根・重い屋根」の区分を廃止して荷重の実態から算定、準耐力壁等を算入可能に）
+  asOf: 2025年4月施行
+  source: &kaisei
+    title: 改正建築物省エネ法・建築基準法の概要
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/common/001627103.pdf
+    type: primary
+  volatility: stable
+
+- id: hyoka-2024-seismic
+  claim: 2024年度の建設住宅性能評価（一戸建て79,154戸）で耐震等級3は97.7%。工法別の母数は在来54,355戸、鉄骨プレハブ19,567戸、ツーバイフォー1,536戸、鉄骨528戸と大きく偏っている
+  values: { total: 79154, grade3: 97.7 }
+  asOf: 2024年度
+  source:
+    title: 住宅性能表示制度 評価実績（一戸建て）令和6年度
+    publisher: 住宅性能評価・表示協会
+    url: https://www.hyoukakyoukai.or.jp/kokai/R06/pdf/kodate_all.pdf
+    type: primary
+  volatility: annual
+  note: 評価を受けた住宅に限られ、大手の比率が高い

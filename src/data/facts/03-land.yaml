@@ -1,0 +1,163 @@
+# 03 土地選び
+- id: law-toshikeikaku-zones
+  claim: 用途地域は13種類（田園住居地域を含む）
+  value: 13
+  unit: 種類
+  asOf: 現行法令
+  source:
+    title: 都市計画法
+    publisher: e-Gov法令検索
+    url: https://laws.e-gov.go.jp/law/343AC0000000100
+    type: primary
+  volatility: stable
+
+- id: law-kijunho-bcr
+  claim: 建ぺい率は都市計画で決まる。角地、または防火・準防火地域で一定の耐火性能がある建物は+10%、両方なら+20%（53条）
+  asOf: 現行法令
+  source: &kijunho
+    title: 建築基準法
+    publisher: e-Gov法令検索
+    url: https://laws.e-gov.go.jp/law/325AC0000000201
+    type: primary
+  volatility: stable
+
+- id: law-kijunho-far
+  claim: 前面道路の幅が12m未満なら、幅×0.4（住居系）または×0.6（その他）と指定容積率の小さいほうが適用される（52条）
+  values: { residential: 0.4, other: 0.6, threshold: 12 }
+  asOf: 現行法令
+  source: *kijunho
+  volatility: stable
+
+- id: law-kijunho-road
+  claim: 道路は原則幅4m以上。敷地は道路に2m以上接すること（42条1項、43条1項。例外あり）
+  values: { width: 4, frontage: 2 }
+  asOf: 現行法令
+  source: *kijunho
+  volatility: stable
+
+- id: law-kijunho-road2
+  claim: 幅4m未満の2項道路は、中心線から2mの線を道路の境界とみなす（42条2項）
+  asOf: 現行法令
+  source: *kijunho
+  volatility: stable
+
+- id: law-sekourei-setback
+  claim: セットバック部分は敷地面積に算入しない（施行令2条1項1号）
+  asOf: 現行法令
+  source: &sekourei
+    title: 建築基準法施行令
+    publisher: e-Gov法令検索
+    url: https://laws.e-gov.go.jp/law/325CO0000000338
+    type: primary
+  volatility: stable
+
+- id: law-kijunho-height
+  claim: 低層住居専用地域と田園住居地域の絶対高さは10mまたは12m（55条）。工業専用地域には住宅を建てられない
+  asOf: 現行法令
+  source: *kijunho
+  volatility: stable
+
+- id: law-kijunho-north
+  claim: 北側斜線は、低層住居専用・田園住居地域が5m＋1.25勾配、中高層住居専用地域が10m＋1.25勾配（56条）
+  asOf: 現行法令
+  source: *kijunho
+  volatility: stable
+
+- id: rftc-ad-rules
+  claim: 広告表示のルール。接道2m未満は「再建築不可」か「建築不可」と明示。セットバック部分がおおむね10%以上なら面積も明示。路地状部分・傾斜地がおおむね30%以上ならその旨を表示
+  asOf: 現行規約
+  source: &rftc
+    title: 不動産の表示に関する公正競争規約
+    publisher: 不動産公正取引協議会連合会
+    url: https://www.rftc.jp/webkanri/kanri/wp-content/uploads/2019/02/h_kiyaku.pdf
+    type: primary
+  volatility: stable
+
+- id: rftc-conditional-land
+  claim: 建築条件付土地の広告には、建築条件付きであること、請負契約の期限、条件が成立しなければ契約を解除し受け取った金銭をすべて返還する旨を表示する
+  asOf: 現行規約
+  source: *rftc
+  volatility: stable
+
+- id: law-sekourei-retaining-wall
+  claim: 高さ2mを超える擁壁は、建築基準法が準用される工作物（施行令138条）
+  asOf: 現行法令
+  source: *sekourei
+  volatility: stable
+
+- id: law-takken-hazard
+  claim: 重要事項説明の災害関係の項目（造成宅地防災区域、土砂災害警戒区域、津波災害警戒区域、水害ハザードマップ上の所在地）
+  asOf: 現行法令
+  source:
+    title: 宅地建物取引業法施行規則
+    publisher: e-Gov法令検索
+    url: https://laws.e-gov.go.jp/law/332M50004000012
+    type: primary
+  volatility: stable
+
+- id: tax-redzone
+  claim: 2028年以降の入居では、災害レッドゾーンの新築は住宅ローン減税の対象外
+  asOf: 令和8年度改正
+  source:
+    title: No.1211-1 住宅借入金等特別控除
+    publisher: 国税庁
+    url: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1211-1.htm
+    type: primary
+  volatility: annual
+
+- id: kashihoken-ground
+  claim: 瑕疵保険に入るには原則として地盤調査が必要
+  asOf: 2026年9月29日閲覧
+  source:
+    title: 新築住宅の地盤調査に関するQ&A
+    publisher: 住宅瑕疵担保責任保険協会
+    url: https://www.kashihoken.or.jp/individuals/shinchiku/qaJiban.php
+    type: primary
+  volatility: annual
+
+- id: jiban-cost
+  claim: 地盤調査・改良の費用の目安（30坪）。SWS試験5〜10万円、表層改良20〜70万円、柱状改良40〜100万円、鋼管杭90〜200万円
+  asOf: 2026年4月8日公開
+  source:
+    title: 地盤調査と地盤改良の費用
+    publisher: 民間の地盤会社
+    url: https://jiban.wssl.co.jp/column/ground-survey-improvement/
+    type: secondary
+  volatility: volatile
+
+- id: brokerage-cap
+  claim: 仲介手数料の上限（税込）。200万円以下の部分5.5%、200万円超400万円以下4.4%、400万円超3.3%
+  values: { tier1: 5.5, tier2: 4.4, tier3: 3.3 }
+  asOf: 2024年7月1日施行
+  source:
+    title: 宅地建物取引業者が受けることができる報酬の額
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/tochi_fudousan_kensetsugyo/const/content/001750143.pdf
+    type: primary
+  volatility: annual
+
+- id: brokerage-2000
+  claim: 2,000万円の土地の仲介手数料の上限（税込）
+  value: 72.6
+  unit: 万円
+  asOf: 2024年7月1日施行
+  source:
+    title: 宅地建物取引業者が受けることができる報酬の額
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/tochi_fudousan_kensetsugyo/const/content/001750143.pdf
+    type: primary
+  volatility: annual
+  derived:
+    formula: (2,000万円 × 3% ＋ 6万円) × 1.1
+    from: [brokerage-cap]
+
+- id: tax-land-registration
+  claim: 土地の売買による所有権移転登記の登録免許税は1.5%（本則2%）で2029年3月31日まで。不動産取得税は土地と住宅が3%で、宅地は課税標準が1/2（2027年3月31日まで）
+  values: { registration: 1.5, acquisition: 3 }
+  asOf: 2026年9月29日確認
+  source:
+    title: 土地・住宅に関する税制
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/totikensangyo/totikensangyo_tk5_000072.html
+    type: primary
+  volatility: annual

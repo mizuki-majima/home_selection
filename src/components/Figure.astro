@@ -1,0 +1,122 @@
+---
+// 図解の外枠。図番号・タイトル・「この図のポイント」・出典番号を統一的に扱う
+import { registryOf } from '../lib/sources';
+
+interface Props {
+  num: string;
+  title: string;
+  point: string;
+  kind: 'interactive' | 'scroll' | 'static';
+  facts?: string[];
+  id?: string;
+}
+
+const { num, title, point, kind, facts = [], id } = Astro.props;
+const reg = registryOf(Astro.locals);
+// 図の中身を先に描画して、中で使われた出典を先に採番する
+const body = await Astro.slots.render('default');
+const notes = Astro.slots.has('notes') ? await Astro.slots.render('notes') : '';
+const numbers = [...new Set(facts.map((f) => reg.register(f).n))].sort((a, b) => a - b);
+const kindLabel = { interactive: '触って動く図', scroll: 'スクロールで展開する図', static: '一覧の図' }[kind];
+const figId = id ?? `fig-${num.replace(/[^0-9-]/g, '')}`;
+---
+
+<figure class={`fig fig-${kind}`} id={figId} aria-labelledby={`${figId}-title`}>
+  <header class="fig-head">
+    <span class="fig-num">図{num}</span>
+    <h3 id={`${figId}-title`}>{title}</h3>
+    <span class="fig-kind">{kindLabel}</span>
+  </header>
+  <div class="fig-body"><Fragment set:html={body} /></div>
+  <figcaption>
+    <p class="point"><span class="point-label">この図のポイント</span>{point}</p>
+    {notes && <div class="fig-notes"><Fragment set:html={notes} /></div>}
+    {
+      numbers.length > 0 && (
+        <p class="fig-src">
+          出典
+          {numbers.map((n) => (
+            <a href={`#src-${n}`}>[{n}]</a>
+          ))}
+        </p>
+      )
+    }
+  </figcaption>
+</figure>
+
+<style>
+  .fig {
+    margin: 4rem 0;
+    padding: 0;
+  }
+
+  .fig-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    gap: 0 1rem;
+    border-top: 1.5px solid var(--ink);
+    padding-top: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .fig-num {
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    font-weight: 700;
+  }
+
+  .fig-head h3 {
+    margin: 0;
+    font-size: clamp(1.1rem, 1rem + 0.6vw, 1.4rem);
+  }
+
+  .fig-kind {
+    grid-column: 2;
+    font-size: 0.78rem;
+    color: var(--mute);
+  }
+
+  figcaption {
+    margin-top: 1.25rem;
+    font-size: 0.92rem;
+  }
+
+  .point {
+    margin: 0 0 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--paper-deep);
+    border-left: 3px solid var(--accent);
+  }
+
+  .point-label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .fig-notes {
+    color: var(--mute);
+    font-size: 0.85rem;
+    line-height: 1.8;
+  }
+
+  .fig-notes :global(p) {
+    margin: 0.3rem 0;
+  }
+
+  .fig-src {
+    color: var(--mute);
+    font-size: 0.82rem;
+    margin: 0.4rem 0 0;
+  }
+
+  .fig-src a {
+    margin-left: 0.3em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+</style>

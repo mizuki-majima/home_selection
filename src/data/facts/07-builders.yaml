@@ -1,0 +1,150 @@
+# 07 住宅会社の選び方
+- id: law-hinkakuho-94
+  claim: 新築住宅の構造耐力上主要な部分と雨水の浸入を防止する部分は、引渡しから10年の瑕疵担保責任。注文者に不利な特約は無効で、特約で20年まで延長できる。瑕疵を知った時から1年以内に通知が必要
+  values: { years: 10, extendable: 20 }
+  asOf: 現行法令
+  source: &hinkakuho
+    title: 住宅の品質確保の促進等に関する法律
+    publisher: e-Gov法令検索
+    url: https://laws.e-gov.go.jp/law/411AC0000000081
+    type: primary
+  volatility: stable
+
+- id: law-hinkakuho-6
+  claim: 設計住宅性能評価書を請負契約書に添付すると、その性能の住宅を建てる契約とみなす（反対の意思を示した場合を除く）
+  asOf: 現行法令
+  source: *hinkakuho
+  volatility: stable
+
+- id: law-rikoho
+  claim: 瑕疵担保責任の履行を確保するため、事業者は保険（保険金額2,000万円以上、期間10年以上）か供託を行う。供託の場合は契約前に供託所の所在地などを書面で説明する
+  asOf: 現行法令
+  source:
+    title: 特定住宅瑕疵担保責任の履行の確保等に関する法律
+    publisher: e-Gov法令検索
+    url: https://laws.e-gov.go.jp/law/419AC0000000066
+    type: primary
+  volatility: stable
+
+- id: kashi-insurance
+  claim: 瑕疵保険は事業者の倒産時などに買主が直接請求できる。戸建ての免責は10万円
+  asOf: 2026年9月29日閲覧
+  source:
+    title: 新築住宅の住宅瑕疵担保責任保険（消費者向け）
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/jutakukentiku/jutaku-kentiku.files/kashitanpocorner/consumer/newly_house_warranty_insurance.html
+    type: primary
+  volatility: annual
+
+- id: dispute-resolution
+  claim: 評価住宅と保険付き住宅は、指定住宅紛争処理機関にあっせん・調停・仲裁を申請できる。申請手数料は原則1万円
+  value: 1
+  unit: 万円
+  asOf: 2026年9月29日閲覧
+  source:
+    title: 住宅紛争処理制度（消費者向け）
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/jutakukentiku/jutaku-kentiku.files/kashitanpocorner/consumer/residential_dispute.html
+    type: primary
+  volatility: annual
+
+- id: completion-guarantee
+  claim: 住宅完成保証制度（任意）。工事中に事業者が倒産した場合に備える制度で、対象は中小事業者
+  asOf: 2026年9月29日閲覧
+  source:
+    title: 住宅完成保証制度
+    publisher: 住宅保証機構
+    url: https://www.mamoris.jp/kansei/
+    type: primary
+  volatility: annual
+
+- id: law-kensetsu-19-20
+  claim: 建設業法。請負契約の必須記載事項は16項目で、変更も書面化する（19条）。請求があれば材料費・労務費などの内訳を記載した見積書を契約成立までに交付し、資材高騰などのおそれは契約前に通知する（20条・20条の2）
+  asOf: 現行法令
+  source:
+    title: 建設業法
+    publisher: e-Gov法令検索
+    url: https://laws.e-gov.go.jp/law/324AC0000000100
+    type: primary
+  volatility: stable
+
+- id: law-kenchikushi-24-7
+  claim: 設計・工事監理の契約では、建築士が免許証を提示したうえで書面で重要事項説明を行う（建築士法24条の7）
+  asOf: 現行法令
+  source:
+    title: 建築士法
+    publisher: e-Gov法令検索
+    url: https://laws.e-gov.go.jp/law/325AC1000000202
+    type: primary
+  volatility: stable
+
+- id: yakkan-change
+  claim: 民間の標準請負約款のモデルでは、変更で増えた部分は時価、減った部分は内訳単価で精算する。保証は原則2年で、構造・雨水は10年
+  asOf: 令和7年12月改正（条番号は版で異なる）
+  source:
+    title: 民間建設工事標準請負契約約款（乙）
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/totikensangyo/const/content/001331104.pdf
+    type: primary
+  volatility: annual
+
+- id: bd-tsubo-refs
+  claim: 坪単価の参考値。フラット35の注文住宅 約119万円/坪、土地付注文住宅 約112万円/坪、業界団体調査 約128万円/坪、民間調査 約85万円/坪
+  values: { f35Chumon: 119, f35ChumonTochi: 112, judanren: 128, private: 85 }
+  unit: 万円/坪
+  asOf: 2024〜2025年度
+  source:
+    title: 2025年度 フラット35利用者調査
+    publisher: 住宅金融支援機構
+    url: https://www.jhf.go.jp/files/topics/4941_ext_99_1.pdf
+    type: primary
+  volatility: annual
+  derived:
+    formula: 建設費（建築費）÷ 住宅面積（延床）を坪に換算
+    from: [f35-2025-chumon, f35-2025-chumon-tochi, judanren-2024-cost, recruit-2025-cost]
+  note: 定義と母集団が違う計算値。横並びで優劣を比べるためのものではない
+
+- id: judanren-2024-cost
+  claim: 業界団体調査の建築費4,760万円、122.5㎡、長期優良88.5%、性能表示80.7%
+  values: { cost: 4760, area: 122.5, longlife: 88.5, performance: 80.7 }
+  asOf: 2024年度調査
+  source:
+    title: 2024年度 戸建注文住宅の顧客実態調査
+    publisher: 住宅生産団体連合会
+    url: https://www.judanren.or.jp/activity/proposal-activity/report03/pdf/kousatu2024.pdf
+    type: primary
+  volatility: annual
+  note: 大手中心の調査で、記入は営業担当者
+
+- id: recruit-2025-cost
+  claim: 民間調査（n=1,342）。建築費は平均3,488万円、延床41.1坪
+  values: { cost: 3488, tsubo: 41.1 }
+  asOf: 2025年11月18日
+  source:
+    title: 注文住宅動向・トレンド調査 2025
+    publisher: 民間（住宅情報メディア運営会社）
+    url: https://www.recruit.co.jp/wp-content/uploads/2025/11/20251118_28HGTi_01.pdf
+    type: secondary
+  volatility: annual
+
+- id: longlife-share
+  claim: 長期優良住宅の認定は令和7年度に新築一戸建て155,838戸で、一戸建て着工の49.8%
+  values: { count: 155838, share: 49.8 }
+  asOf: 令和7年度（2026年7月公表）
+  source:
+    title: 長期優良住宅の認定状況
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/report/press/house04_hh_001350.html
+    type: primary
+  volatility: annual
+
+- id: chord-2024
+  claim: 住まいの相談（2024年度）。新築戸建ての不具合の相談5,759件の事象は、ひび割れ19.2%、雨漏り15.5%
+  values: { cases: 5759, crack: 19.2, leak: 15.5 }
+  asOf: 2025年9月30日
+  source:
+    title: 住宅相談統計年報2025
+    publisher: 住宅リフォーム・紛争処理支援センター
+    url: https://www.chord.or.jp/assets/NP2025_web..pdf
+    type: primary
+  volatility: annual

@@ -1,0 +1,128 @@
+# 06 住宅性能
+- id: ua-standards
+  claim: 断熱等性能等級ごとのUA値の基準（1〜7地域、W/㎡K）
+  values:
+    g4r1: 0.46
+    g4r2: 0.46
+    g4r3: 0.56
+    g4r4: 0.75
+    g4r5: 0.87
+    g4r6: 0.87
+    g4r7: 0.87
+    g5r1: 0.40
+    g5r2: 0.40
+    g5r3: 0.50
+    g5r4: 0.60
+    g5r5: 0.60
+    g5r6: 0.60
+    g5r7: 0.60
+    g6r1: 0.28
+    g6r2: 0.28
+    g6r3: 0.28
+    g6r4: 0.34
+    g6r5: 0.46
+    g6r6: 0.46
+    g6r7: 0.46
+    g7r1: 0.20
+    g7r2: 0.20
+    g7r3: 0.20
+    g7r4: 0.23
+    g7r5: 0.26
+    g7r6: 0.26
+    g7r7: 0.26
+  asOf: 2025年3月
+  source: &mlit2503
+    title: 住宅の省エネルギー性能に関する資料（2025年3月）
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/report/press/content/001884522.pdf
+    type: primary
+  volatility: annual
+
+- id: heating-energy-model
+  claim: 暖冷房の一次エネルギー消費量（モデル計算）。6地域は等級4比で等級5が28%、等級6が31%、等級7が43%少ない。2地域は14%／27%／40%少ない
+  values: { r6g5: 13.7, r6g6: 13.2, r6g7: 10.8, r6g5pct: 28, r6g6pct: 31, r6g7pct: 43, r2g5: 60.7, r2g6: 51.2, r2g7: 42.4, r2g5pct: 14, r2g6pct: 27, r2g7pct: 40 }
+  unit: GJ/年
+  asOf: 2021年11月の資料
+  source:
+    title: 住宅の省エネ性能の段階的な水準の検討資料（2021年11月）
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/policy/shingikai/content/001460573.pdf
+    type: primary
+  volatility: stable
+  note: モデル計算で、実測値ではない
+
+- id: heat20-min-temp
+  claim: 6地域の冬の最低室温の目安（HEAT20）。等級4でおおむね8℃、等級6で13℃、等級7で15℃を下回らない
+  values: { g4: 8, g6: 13, g7: 15 }
+  unit: ℃
+  asOf: 2025年3月
+  source: *mlit2503
+  volatility: stable
+
+- id: airtight-no-standard
+  claim: 気密性能（C値）の国の基準は定められていない。ひとつの目安としてHEAT20の値が紹介されている
+  asOf: 2025年3月
+  source: *mlit2503
+  volatility: stable
+
+- id: energy-mandatory-2025
+  claim: 2025年4月から、原則すべての新築に省エネ基準への適合を義務付け
+  asOf: 2025年4月施行
+  source:
+    title: 改正建築物省エネ法・建築基準法の概要
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/common/001627103.pdf
+    type: primary
+  volatility: stable
+
+- id: energy-2030-policy
+  claim: 省エネ基準の水準を遅くとも2030年度までにZEH水準へ引き上げる方針
+  asOf: 2025年2月閣議決定
+  source:
+    title: 住宅・建築物の省エネ対策に関する審議会資料
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/policy/shingikai/content/001964702.pdf
+    type: primary
+  volatility: annual
+
+- id: seismic-grades
+  claim: 耐震等級1は建築基準法レベル、2はその1.25倍、3は1.5倍の地震力に対して倒壊・崩壊しない程度
+  values: { g1: 1, g2: 1.25, g3: 1.5 }
+  asOf: 現行制度
+  source: &kumamoto
+    title: 熊本地震における建築物被害の原因分析を行う委員会 報告書
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/common/001155087.pdf
+    type: primary
+  volatility: stable
+
+- id: kumamoto-2016-grade
+  claim: 熊本地震（2016）、2000年6月以降の木造。建築基準法レベルの301棟は倒壊2.3%・無被害60.1%。耐震等級3の16棟は無被害87.5%（14棟）
+  values: { baseN: 301, baseCollapse: 2.3, baseNone: 60.1, g3N: 16, g3None: 87.5, g3NoneCount: 14 }
+  asOf: 2016年9月
+  source: *kumamoto
+  volatility: stable
+
+- id: noto-2024-grade
+  claim: 能登半島地震（2024）。耐震等級2の12棟、等級3の19棟、長期優良住宅の19棟は、それぞれ1棟だけ軽微〜中破で、ほかは無被害
+  values: { g2N: 12, g3N: 19, longlifeN: 19 }
+  asOf: 2025年12月
+  source:
+    title: 能登半島地震における建築物構造被害の原因分析を行う委員会 報告書
+    publisher: 国土交通省
+    url: https://www.mlit.go.jp/report/press/content/001974606.pdf
+    type: primary
+  volatility: stable
+
+- id: hyoka-2024-insulation
+  claim: 2024年度の建設住宅性能評価（一戸建て）。断熱等級は4が6.2%、5が75.3%、6が18.1%、7が0.2%
+  values: { g4: 6.2, g5: 75.3, g6: 18.1, g7: 0.2 }
+  unit: '%'
+  asOf: 2024年度
+  source:
+    title: 住宅性能表示制度 評価実績（一戸建て）令和6年度
+    publisher: 住宅性能評価・表示協会
+    url: https://www.hyoukakyoukai.or.jp/kokai/R06/pdf/kodate_all.pdf
+    type: primary
+  volatility: annual
+  note: 評価を受けた住宅に限られる

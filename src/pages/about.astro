@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+import { GLOSSARY } from '../data/glossary';
+import { UPDATED } from '../data/chapters';
+---
+
+<BaseLayout title="このサイトについて" description="HOUSE NOTE の目的、出典の方針、免責事項、更新履歴。">
+  <article class="wrap about">
+    <h1>このサイトについて</h1>
+
+    <section>
+      <h2>目的</h2>
+      <p class="measure">
+        住宅購入（主に新築一戸建て・注文住宅）を検討する人が、図を見るだけで「決めどころ」の要点をつかめるようにするための情報サイトです。建売住宅とマンションは、比較の対象として扱います。
+      </p>
+    </section>
+
+    <section>
+      <h2>出典と数値の方針</h2>
+      <ul class="measure">
+        <li>図と本文の数値は、すべて出典と時点つきのデータファイルから読み込んでいます。出典や時点のない数値は、サイトを作る段階でエラーになる仕組みです。</li>
+        <li>数字の右の [番号] は、章末の出典一覧に対応しています。</li>
+        <li>「当方算出」の印がある値は、出典の数値からこのサイトが計算した値です。印を押すと計算式を確認できます。</li>
+        <li>金利など変わりやすい値には「○年○月時点」を添えています。</li>
+        <li>補助金は受付状況や予算で日々変わるため、金額は載せず、仕組みと公式サイトを案内しています。</li>
+        <li>数値は公開時点の調査で一次資料と照合したものです。照合できなかった情報は載せていません。一方、公開後の自動的な見直しの仕組みはないため、最新の情報は各公式サイトで確認してください。</li>
+        <li>実在の住宅会社名・商品名は掲載しません。住宅会社はタイプ別に扱い、傾向には必ず「確かめる書類」を添えています。</li>
+        <li>図・イラストはすべて自作です。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>免責事項</h2>
+      <Disclaimer />
+    </section>
+
+    <section>
+      <h2>用語集</h2>
+      <dl class="glossary measure">
+        {
+          Object.values(GLOSSARY).map((g) => (
+            <>
+              <dt>{g.term}</dt>
+              <dd>{g.body}</dd>
+            </>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section>
+      <h2>更新履歴</h2>
+      <ul class="measure">
+        <li><time datetime={UPDATED}>{UPDATED.replaceAll('-', '.')}</time> 公開（7章・図解14点）</li>
+      </ul>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-top: 3rem;
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 1.4rem + 2vw, 2.6rem);
+  }
+
+  section {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  ul {
+    padding-left: 1.2rem;
+  }
+
+  .glossary dt {
+    font-weight: 800;
+    margin-top: 1rem;
+  }
+
+  .glossary dd {
+    margin: 0.2rem 0 0;
+  }
+</style>

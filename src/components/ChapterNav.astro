@@ -1,0 +1,79 @@
+---
+import { neighbors } from '../data/chapters';
+import { chapterHref, withBase } from '../lib/paths';
+
+interface Props {
+  slug: string;
+}
+const { prev, next } = neighbors(Astro.props.slug);
+---
+
+<nav class="chapter-nav" aria-label="前後の章">
+  {
+    prev ? (
+      <a class="prev" href={chapterHref(prev.slug)} rel="prev">
+        <span class="dir">← 前の章</span>
+        <span class="t">
+          {prev.num} {prev.title}
+        </span>
+      </a>
+    ) : (
+      <a class="prev" href={withBase()}>
+        <span class="dir">← 目次</span>
+        <span class="t">HOUSE NOTE</span>
+      </a>
+    )
+  }
+  {
+    next ? (
+      <a class="next" href={chapterHref(next.slug)} rel="next">
+        <span class="dir">次の章 →</span>
+        <span class="t">
+          {next.num} {next.title}
+        </span>
+      </a>
+    ) : (
+      <a class="next" href={withBase()}>
+        <span class="dir">目次へ →</span>
+        <span class="t">HOUSE NOTE</span>
+      </a>
+    )
+  }
+</nav>
+
+<style>
+  .chapter-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    margin-top: 4rem;
+  }
+
+  a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 1.25rem 1rem;
+    text-decoration: none;
+    min-height: 44px;
+  }
+
+  a:hover {
+    background: var(--paper-deep);
+  }
+
+  .next {
+    text-align: right;
+    border-left: 1px solid var(--ink);
+  }
+
+  .dir {
+    font-size: 0.8rem;
+    color: var(--mute);
+  }
+
+  .t {
+    font-weight: 700;
+  }
+</style>
