@@ -1,0 +1,80 @@
+---
+// 図3-3 の最終段：2025年4月の制度変更の分岐図
+import Fact from '../../components/Fact.astro';
+---
+
+<div class="law">
+  <p class="law-title">2025年4月からの区分<Fact id="law-2025-shin2go" text="" /></p>
+  <div class="law-grid">
+    <div class="col">
+      <p class="q">2階以上、または延べ200㎡超</p>
+      <p class="a">新2号建築物 — 構造の審査あり</p>
+    </div>
+    <div class="col">
+      <p class="q">平屋かつ延べ200㎡以下</p>
+      <p class="a">新3号建築物 — 審査の一部を省略</p>
+    </div>
+  </div>
+  <p class="law-title">構造計算が法律上必要になる規模<Fact id="law-structural-calc" text="" /></p>
+  <div class="law-grid">
+    <div class="col">
+      <p class="q">木造</p>
+      <p class="a accent">3階以上、または延べ300㎡超</p>
+      <p class="sub">一般的な木造2階建ては、壁量などの仕様で確かめる（構造計算は任意）</p>
+    </div>
+    <div class="col">
+      <p class="q">木造以外（鉄骨・RC）</p>
+      <p class="a accent">2階以上、または延べ200㎡超</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .law {
+    margin-top: 2.5rem;
+    padding: 1.2rem;
+    border: 1px solid var(--ink);
+  }
+
+  .law-title {
+    font-weight: 700;
+    margin: 0 0 0.6rem;
+  }
+
+  .law-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: 0;
+    margin-bottom: 1.4rem;
+    border-top: 1px solid var(--ink);
+  }
+
+  .law-grid:last-child {
+    margin-bottom: 0;
+  }
+
+  .col {
+    padding: 0.8rem 1rem 0.4rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .q {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--mute);
+  }
+
+  .a {
+    margin: 0.2rem 0 0.2rem;
+    font-weight: 700;
+  }
+
+  .a.accent {
+    color: var(--accent);
+  }
+
+  .sub {
+    font-size: 0.85rem;
+    color: var(--mute);
+  }
+</style>

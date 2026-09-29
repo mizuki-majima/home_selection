@@ -1,0 +1,176 @@
+---
+import ChapterLayout from '../../layouts/ChapterLayout.astro';
+import Figure from '../../components/Figure.astro';
+import Fact from '../../components/Fact.astro';
+import Term from '../../components/Term.astro';
+import InsulationDial from '../../diagrams/08-performance/InsulationDial.svelte';
+import Fig8_2Seismic from '../../diagrams/08-performance/Fig8_2Seismic.astro';
+import { getFact } from '../../lib/facts';
+
+const ua = getFact('ua-standards').values!;
+const energy = getFact('heating-energy-model').values!;
+const temp = getFact('heat20-min-temp').values!;
+import PerfIcons from '../../diagrams/simple/PerfIcons.astro';
+---
+
+<ChapterLayout slug="08-performance">
+  <Fragment slot="simple">
+    <p class="lead-big">
+      家の性能は「暖かさ」「省エネ」「地震への強さ」の3つで見ます。どれも等級という数字で比べられます。
+    </p>
+    <Figure
+      num="8-1"
+      title="住宅性能の3つのものさし"
+      kind="static"
+      level={1}
+      point="暖かさ・省エネ・地震への強さは、それぞれ等級で比べられる。数字が大きいほど高性能。"
+    >
+      <PerfIcons />
+    </Figure>
+  </Fragment>
+
+  <ol slot="points">
+    <li>
+      <strong>省エネ性能は2つの等級で比べる。</strong>
+      断熱等性能等級（UA値。基準は地域別）と、一次エネルギー消費量等級（BEI）。2025年4月から省エネ基準（等級4相当）が新築の最低ラインになり<Fact id="energy-mandatory-2025" text="" />、遅くとも2030年度までにZEH水準へ引き上げる方針です<Fact id="energy-2030-policy" text="" />。
+    </li>
+    <li>
+      <strong>等級が上がるほど暖冷房エネルギーは減る（モデル計算）。</strong>
+      6地域では、等級4と比べて等級5が<Fact id="heating-energy-model" k="r6g5pct" unit="%" bare />、等級6が<Fact id="heating-energy-model" k="r6g6pct" unit="%" bare />、等級7が<Fact id="heating-energy-model" k="r6g7pct" unit="%" />少なくなります。円額は単価と住まい方で変わるため、比べるなら同じ条件の「目安光熱費」を使います。
+    </li>
+    <li>
+      <strong>等級は制度の入口でもある。</strong>
+      住宅ローン減税の限度額、長期優良住宅、地震保険の割引は、等級で決まります（金額は05章）。<Term k="zeh" />と「ZEH」は別の言葉です。
+    </li>
+    <li>
+      <strong>耐震等級は1＝建築基準法レベル、2＝1.25倍、3＝1.5倍。</strong>
+      熊本（2016）で等級3の<Fact id="kumamoto-2016-grade" k="g3N" unit="棟" bare />は<Fact id="kumamoto-2016-grade" k="g3NoneCount" unit="棟" />が無被害、能登（2024）でも評価を受けた住宅はほぼ無被害でした<Fact id="noto-2024-grade" text="" />。「相当」ではなく、評価書で確かめます。
+    </li>
+    <li>
+      <strong>気密（C値）は国の基準にない。</strong>
+      計算では出せず、現場で測って初めてわかります<Fact id="airtight-no-standard" text="" />。測定するか・いつ測るか・目標値はいくつかを、契約前に確認します。
+    </li>
+  </ol>
+
+  <h2 class="sec">図でくわしく</h2>
+
+  <Figure
+    num="8-2"
+    title="耐震等級の3段と実際の被害"
+    kind="static"
+    level={2}
+    point="等級を取得した住宅は大地震でもほぼ無被害だった。ただし件数は少なく、評価を受けた住宅の実績であることに注意。"
+    facts={['seismic-grades', 'kumamoto-2016-grade', 'noto-2024-grade', 'earthquake-insurance']}
+  >
+    <Fig8_2Seismic />
+  </Figure>
+
+  <Figure
+    num="8-3"
+    title="地域×等級 断熱ダイヤル"
+    kind="interactive"
+    level={3}
+    point="同じ「等級5」でも、求められるUA値は地域で違う。寒い地域ほど厳しい。"
+    facts={['ua-standards', 'heating-energy-model', 'heat20-min-temp']}
+  >
+    <InsulationDial client:visible ua={ua} energy={energy} temp={temp} />
+  </Figure>
+
+  <h2 class="sec">計算でわかる性能、測らないとわからない性能</h2>
+  <div class="two-col">
+    <div>
+      <p class="col-title">図面と計算で決まる</p>
+      <ul>
+        <li>UA値（断熱等性能等級）</li>
+        <li>BEI（一次エネルギー消費量等級）</li>
+        <li>耐震等級</li>
+      </ul>
+    </div>
+    <div>
+      <p class="col-title accent">現場で測って初めてわかる</p>
+      <ul>
+        <li>C値（気密性能）。国の基準はない</li>
+      </ul>
+      <p class="small">契約前に確認：測定するか／いつ測るか（工事中か完成時か）／目標値はいくつか</p>
+    </div>
+  </div>
+
+  <h2 class="sec">よくある誤解</h2>
+  <ul class="myths">
+    <li>
+      <p class="myth">等級4なら高性能</p>
+      <p class="truth">等級4は新築の最低ラインで、2030年度までに引き上げる方針です。</p>
+    </li>
+    <li>
+      <p class="myth">ZEH水準住宅＝ZEH</p>
+      <p class="truth">ZEH水準は断熱と一次エネの性能の水準で、太陽光は要件ではありません。</p>
+    </li>
+    <li>
+      <p class="myth">等級を1つ上げれば光熱費が○万円下がる</p>
+      <p class="truth">下がる額はモデルと条件しだいです。</p>
+    </li>
+    <li>
+      <p class="myth">高気密は国の基準で保証されている</p>
+      <p class="truth">C値の国の基準はありません。</p>
+    </li>
+    <li>
+      <p class="myth">耐震等級3相当なら等級3と同じ</p>
+      <p class="truth">地震保険の割引には、品確法の等級を確認できる資料が必要です。</p>
+    </li>
+    <li>
+      <p class="myth">長期優良住宅は特別な構造の家</p>
+      <p class="truth">構造の種類ではなく、劣化対策・耐震・省エネなどの基準を組み合わせた認定です。</p>
+    </li>
+  </ul>
+
+  <h2 class="sec">注意書き</h2>
+  <ul class="notes">
+    <li>GJ・室温はモデル値です。</li>
+    <li>2024年度に評価を受けた一戸建ての断熱等級は、等級5が<Fact id="hyoka-2024-insulation" k="g5" unit="%" bare />、等級6が<Fact id="hyoka-2024-insulation" k="g6" unit="%" />。評価を受けた住宅に限った値です。</li>
+    <li>補助金の要件と金額は、05章の案内から公式サイトで確認してください。</li>
+  </ul>
+</ChapterLayout>
+
+<style>
+  .two-col {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: 0;
+    border: 1px solid var(--ink);
+  }
+
+  .two-col > div {
+    padding: 1rem 1.2rem;
+  }
+
+  .two-col > div + div {
+    border-left: 1px solid var(--ink);
+  }
+
+  @media (max-width: 640px) {
+    .two-col > div + div {
+      border-left: 0;
+      border-top: 1px solid var(--ink);
+    }
+  }
+
+  .col-title {
+    font-weight: 800;
+    margin: 0 0 0.4rem;
+  }
+
+  .col-title.accent {
+    color: var(--accent);
+  }
+
+  .two-col ul {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  .small {
+    font-size: 0.85rem;
+    color: var(--mute);
+    margin-top: 0.6rem;
+  }
+</style>

@@ -1,0 +1,202 @@
+---
+// 図4-2 タイプ別・確かめる表。上段は「よくある傾向（例外あり）」、下段は「確かめる書類・数値」。
+import Fact from '../../components/Fact.astro';
+
+const TYPES = ['大手ハウスメーカー', '中堅・地域ビルダー', '規格型（価格重視）', '工務店', '設計事務所＋工務店', 'フランチャイズ系'];
+
+interface Axis {
+  name: string;
+  cells: string[];
+  check: string;
+}
+
+const AXES: Axis[] = [
+  {
+    name: '誰が設計するか',
+    cells: ['社内の設計担当（建築士）', '社内または提携の建築士', '用意されたプランから選ぶ形が中心', '社内または提携の建築士', '設計事務所の建築士', '本部のプラン・仕様を加盟店が使う'],
+    check: '担当する建築士の氏名・資格（建築士の重要事項説明）',
+  },
+  {
+    name: '誰が施工するか',
+    cells: ['系列会社や協力会社', '自社と協力会社', '自社と協力会社', '自社の職人と協力会社', '見積りで選んだ工務店', '加盟店（地域の会社）'],
+    check: '契約の相手と、実際に施工する会社',
+  },
+  {
+    name: '誰が工事監理をするか',
+    cells: ['社内の建築士', '社内の建築士', '社内の建築士', '社内または外部の建築士', '設計した事務所（施工者と別の立場）', '加盟店の建築士'],
+    check: '工事監理者の氏名と、報告の方法・頻度',
+  },
+  {
+    name: '標準仕様の範囲',
+    cells: ['標準の範囲が広く、オプションで加算', '会社により幅がある', '範囲を絞って価格を抑える', '会社により大きく違う', 'ひとつずつ決める', '本部の標準仕様'],
+    check: '標準仕様書と、見積りの「含む／含まない」',
+  },
+  {
+    name: '価格の決まり方',
+    cells: ['商品の基本価格＋オプション', '基本価格＋オプション、または積算', 'プラン・面積ごとの価格表に近い', '積算による見積り', '設計料＋工事費（工事は見積りを比べる）', '本部の価格体系'],
+    check: '内訳を記載した見積書（請求すれば契約前に交付される）',
+  },
+  {
+    name: '性能の示し方',
+    cells: ['評価書を取得する例が多い', '会社・プランで違う', 'プランごとに決まっていることが多い', '会社・物件で違う', '設計で決める', '本部の標準で決まっていることが多い'],
+    check: '設計住宅性能評価書（契約書に添付すると契約内容になる）',
+  },
+  {
+    name: '工事中に会社が倒れたら',
+    cells: ['完成保証の対象外の規模のことがある', '完成保証（任意）の加入は会社しだい', '同左', '同左', '工務店の加入を確認', '加盟店の加入を確認'],
+    check: '住宅完成保証制度の加入の有無',
+  },
+  {
+    name: '引渡し後の保証',
+    cells: ['法定10年＋延長の制度がある例が多い', '法定10年＋会社の制度', '法定10年＋会社の制度', '法定10年＋会社の制度', '法定10年（施工者）＋会社の制度', '法定10年＋本部・加盟店の制度'],
+    check: '瑕疵保険の保険証券（または供託の説明書）、延長の条件',
+  },
+];
+---
+
+<div class="scroller" tabindex="0" role="region" aria-label="住宅会社のタイプ別・確かめる表（横にスクロールできます）">
+  <table>
+    <caption class="sr-only">比較軸ごとの、よくある傾向と確かめる書類</caption>
+    <thead>
+      <tr>
+        <th scope="col" class="axis-h">比較軸</th>
+        {TYPES.map((t) => <th scope="col">{t}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {
+        AXES.map((a) => (
+          <>
+            <tr class="tend">
+              <th scope="row" rowspan="2" class="axis">
+                {a.name}
+              </th>
+              {a.cells.map((c) => (
+                <td>{c}</td>
+              ))}
+            </tr>
+            <tr class="chk">
+              <td colspan={TYPES.length}>
+                <span class="tag">確かめる</span>
+                {a.check}
+              </td>
+            </tr>
+          </>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+<p class="scroll-hint" aria-hidden="true">← 横にスクロールできます →</p>
+
+<div class="law-floor">
+  <p class="lf-title">どのタイプでも同じ、法律の最低ライン</p>
+  <ul>
+    <li>構造と雨漏りに関わる部分は、引渡しから<Fact id="law-hinkakuho-94" k="years" unit="年" />の責任。短くする特約は無効（特約で20年まで延長可）。知ってから1年以内に通知する</li>
+    <li>その責任を果たすための保険か供託<Fact id="law-rikoho" text="" /></li>
+    <li>契約書の必須記載と、変更の書面化。請求すれば内訳を記載した見積書を受け取れる<Fact id="law-kensetsu-19-20" text="" /></li>
+    <li>設計・工事監理を含む契約では、建築士による書面の重要事項説明<Fact id="law-kenchikushi-24-7" text="" /></li>
+  </ul>
+</div>
+
+<div class="evidence">
+  <p class="ev-title">根拠の帯：単純比較はできません</p>
+  <p>
+    業界団体調査（大手中心・記入は営業担当者）では、長期優良住宅<Fact id="judanren-2024-cost" k="longlife" unit="%" bare />・性能表示<Fact id="judanren-2024-cost" k="performance" unit="%" />。全国では、令和7年度の長期優良住宅の認定が新築一戸建て着工の<Fact id="longlife-share" k="share" unit="%" />。母集団と定義が違うため、この差をそのままタイプの優劣として読まないでください。
+  </p>
+</div>
+
+<style>
+  .scroller {
+    overflow-x: auto;
+    border-top: 1.5px solid var(--ink);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 900px;
+    width: 100%;
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+
+  th,
+  td {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.55rem 0.6rem;
+  }
+
+  thead th {
+    font-size: 0.8rem;
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper);
+  }
+
+  .axis,
+  .axis-h {
+    position: sticky;
+    left: 0;
+    background: var(--paper);
+    width: 8.5rem;
+    min-width: 8.5rem;
+    font-weight: 700;
+    border-right: 1px solid var(--rule);
+    z-index: 1;
+  }
+
+  .tend td {
+    color: var(--ink);
+  }
+
+  .chk td {
+    border-bottom: 1px solid var(--rule);
+    padding-top: 0;
+    color: var(--ink);
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    color: var(--paper);
+    background: var(--accent);
+    padding: 0 0.5em;
+    margin-right: 0.5em;
+  }
+
+  .scroll-hint {
+    font-size: 0.75rem;
+    color: var(--mute);
+    text-align: center;
+    margin: 0.3rem 0 0;
+  }
+
+  @media (min-width: 1000px) {
+    .scroll-hint {
+      display: none;
+    }
+  }
+
+  .law-floor,
+  .evidence {
+    margin-top: 1.5rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--ink);
+    font-size: 0.9rem;
+  }
+
+  .evidence {
+    border-style: dashed;
+  }
+
+  .lf-title,
+  .ev-title {
+    font-weight: 800;
+    margin: 0 0 0.4rem;
+  }
+
+  .law-floor ul {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+</style>

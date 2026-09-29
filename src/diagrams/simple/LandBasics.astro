@@ -1,0 +1,37 @@
+---
+// やさしい図：土地で最初に見る3つのこと
+const CHECKS = [
+  {
+    t: '建てられる大きさ',
+    d: '同じ広さの土地でも、用途地域によって建てられる家の大きさが変わる',
+    ic: '<path d="M6 44 L32 56 L58 44 L32 32 Z"/><path d="M22 42 V26 L32 20 L42 26 V46" class="ac"/><path d="M22 26 L32 32 L42 26 M32 32 V50" class="ac"/>',
+  },
+  {
+    t: '道路',
+    d: '原則として、幅4m以上の道路に2m以上接していないと家は建てられない',
+    ic: '<rect x="12" y="8" width="40" height="30"/><path d="M4 46 H60 M4 58 H60"/><path d="M4 52 H60" stroke-dasharray="6 4"/><path d="M12 42 H52" class="ac"/>',
+  },
+  {
+    t: '災害のリスク',
+    d: 'ハザードマップで洪水・土砂などを自分で重ねて確かめる',
+    ic: '<path d="M10 30 L32 12 L54 30 M15 26 V44 H49 V26"/><path d="M4 50 C10 46 14 54 20 50 S30 46 36 50 S46 54 52 50 S58 48 60 50" class="ac"/><path d="M4 58 C10 54 14 62 20 58 S30 54 36 58 S46 62 52 58" class="ac"/>',
+  },
+];
+---
+
+<div class="easy">
+  <ul class="easy-grid">
+    {
+      CHECKS.map((x, i) => (
+        <li class="easy-card">
+          <svg class="ic" viewBox="0 0 64 64" aria-hidden="true" set:html={x.ic} />
+          <h3>
+            {i + 1}. {x.t}
+          </h3>
+          <p>{x.d}</p>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="easy-note">土地の<strong>値段</strong>を比べる前に、この3つを確かめます。どれも、広告や自治体の地図で調べられます。</p>
+</div>

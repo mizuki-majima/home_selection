@@ -1,0 +1,155 @@
+---
+import ChapterLayout from '../../layouts/ChapterLayout.astro';
+import Figure from '../../components/Figure.astro';
+import Fact from '../../components/Fact.astro';
+import Steps from '../../diagrams/simple/Steps.astro';
+import Fig1_2Timeline from '../../diagrams/01-timing/Fig1_2Timeline.astro';
+import { valueOf } from '../../lib/facts';
+
+const period = [
+  { label: '初回接触から契約まで2か月未満（最多）', v: valueOf('judanren-2024-period', 'contactUnder2m') },
+  { label: '契約から着工まで6か月以内', v: valueOf('judanren-2024-period', 'contractToStart6m') },
+  { label: '土地購入から竣工まで2年以内', v: valueOf('judanren-2024-period', 'landToComplete2y') },
+];
+---
+
+<ChapterLayout slug="01-timing">
+  <Fragment slot="simple">
+    <p class="lead-big">
+      「いつ住みたいか」から逆算して動き出します。注文住宅は時間がかかるので早めに。年齢・金利・制度の区切りも、買う時期を左右します。
+    </p>
+    <Figure
+      num="1-1"
+      title="家を買うまでの5ステップ"
+      kind="static"
+      level={1}
+      point="まず全体の順番をつかむ。建売住宅やマンションは、3〜5のステップが短くなる。"
+    >
+      <Steps />
+    </Figure>
+  </Fragment>
+
+  <ol slot="points">
+    <li>
+      <strong>住みたい時期から逆算する。</strong>
+      入学や転勤など「この時期までに住みたい」から逆算します。注文住宅は、業界団体の調査（大手中心、記入は営業担当者）で、土地を買ってから完成まで2年以内が<Fact id="judanren-2024-period" k="landToComplete2y" unit="%" bare />、契約から工事の始まりまで6か月以内が<Fact id="judanren-2024-period" k="contractToStart6m" unit="%" />。完成済みの建売住宅やマンションなら、ずっと短くなります。
+    </li>
+    <li>
+      <strong>年齢は、ローンを返す期間に関係する。</strong>
+      フラット35の借入期間は「80歳−申込時の年齢」と35年の短いほうまで<Fact id="f35-conditions" text="" />。申込時に<Fact id="f35-term-age" />を超えると、35年では組めません。期間が短くなると、毎月の返済額は増えます。
+    </li>
+    <li>
+      <strong>金利は上がってきている。</strong>
+      フラット35の最低金利は、2025年9月の<Fact id="f35-rate-history" k="y2025m09" unit="%" bare />から2026年9月は<Fact id="f35-rate-history" k="y2026m09" unit="%" />。フラット35の金利は、申し込んだときではなく<strong>お金を受け取るとき</strong>に決まります<Fact id="f35-flow" text="" />。将来の金利は、このサイトでは予測しません。
+    </li>
+    <li>
+      <strong>制度には区切りがある。</strong>
+      住宅ローン減税は、2028年以降に入居する「省エネ基準適合」の新築が原則として対象外になります<Fact id="tax-loan-limit" text="" />。子育て世帯（19歳未満の扶養家族がいる）・若者夫婦世帯（本人か配偶者が40歳未満）は減税の枠が大きくなります<Fact id="tax-loan-nta" text="" />。親などからの住宅資金の贈与の非課税（省エネ等住宅は<Fact id="gift-tax-exemption" k="energy" unit="万円" bare />まで）は、2026年12月31日までの贈与が対象です<Fact id="gift-tax-exemption" text="" />。
+    </li>
+    <li>
+      <strong>注文住宅は、完成前から何度もお金を払う。</strong>
+      民間の目安では、建物代を契約時・着工時・上棟時・引渡し前に約10／30／30／30%ずつ払います<Fact id="suumo-payment-split" text="" />。住宅ローンのお金が入るのは完成後の手続きのあと。それまでは自己資金か、つなぎ融資などでまかないます（下の図1-2）。
+    </li>
+  </ol>
+
+  <h2 class="sec">図でくわしく</h2>
+
+  <Figure
+    num="1-2"
+    title="家とお金の時間軸"
+    kind="scroll"
+    level={2}
+    point="注文住宅は、支払いが先に何度も来て、住宅ローンの資金が入るのは最後。その間は自己資金かつなぎ融資でしのぐ。"
+    facts={['suumo-payment-split', 'f35-flow', 'law-kijunho-review', 'judanren-2024-period']}
+  >
+    <Fig1_2Timeline />
+    <div class="hist">
+      <p class="hist-title">期間の分布（業界団体調査・大手中心、記入は営業担当者）<Fact id="judanren-2024-period" text="" /></p>
+      {
+        period.map((p) => (
+          <div class="hist-row">
+            <span class="hl">{p.label}</span>
+            <span class="hb" aria-hidden="true">
+              <span style={`width:${p.v}%`} />
+            </span>
+            <span class="hv">{p.v}%</span>
+          </div>
+        ))
+      }
+    </div>
+  </Figure>
+
+  <h2 class="sec">よくある誤解</h2>
+  <ul class="myths">
+    <li>
+      <p class="myth">ローンが通れば、完成までお金は要らない</p>
+      <p class="truth">フラット35の資金を受け取れるのは竣工後の手続きの後。金利もそのとき確定するため、完成までに金利が上がれば返済額も増えます。</p>
+    </li>
+    <li>
+      <p class="myth">手付金を払えば、いつでも手付放棄で解約できる</p>
+      <p class="truth">手付解除ができるのは、相手方が契約の履行に着手するまでです。売主が宅建業者なら、手付は代金の2割までと決まっています<Fact id="law-takken-39" text="" />。</p>
+    </li>
+    <li>
+      <p class="myth">手付金は保全されるから安心</p>
+      <p class="truth">保全措置の義務は、宅建業者が売主の売買で、一定額を超える場合に限られます<Fact id="law-takken-41" text="" />。注文住宅の建物の請負代金は対象外です。</p>
+    </li>
+    <li>
+      <p class="myth">年収倍率○倍までなら安全という公的な基準がある</p>
+      <p class="truth">公的な“適正倍率”は確認できませんでした。返せる額は05章の図で、自分の家計から確かめます。</p>
+    </li>
+  </ul>
+
+  <h2 class="sec">注意書き</h2>
+  <ul class="notes">
+    <li>期間の数値は業界団体の調査（大手中心、記入は営業担当者）によるものです。</li>
+    <li>建物代の支払割合は民間の目安（二次情報）で、法律の定めではありません。実際は請負契約書によります。</li>
+    <li>減税・贈与の特例は毎年の税制改正で変わります。最新の情報は国税庁・国交省のページで確認してください。</li>
+  </ul>
+</ChapterLayout>
+
+<style>
+  .hist {
+    margin-top: 2rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .hist-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .hist-row {
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) 3.5rem;
+    gap: 0.8rem;
+    align-items: center;
+    font-size: 0.82rem;
+    min-height: 30px;
+  }
+
+  .hb {
+    height: 10px;
+    background: var(--paper-deep);
+  }
+
+  .hb span {
+    display: block;
+    height: 100%;
+    background: var(--ink);
+  }
+
+  .hv {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  @media (max-width: 600px) {
+    .hist-row {
+      grid-template-columns: minmax(0, 1fr) 3.5rem;
+    }
+    .hl {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

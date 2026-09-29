@@ -1,0 +1,154 @@
+---
+// 図6-2 道路と敷地（スクロール）。1枚の配置図に要素を描き足していく。
+import Scrolly from '../shared/Scrolly.astro';
+import Fact from '../../components/Fact.astro';
+
+const PX = 15; // 1m
+const ROAD_TOP = 290; // 実際の道路の端（敷地側）
+const ROAD_W = 3 * PX; // 幅3mの2項道路
+const CENTER = ROAD_TOP + ROAD_W / 2;
+const BOUND = CENTER - 2 * PX; // 中心線から2m
+---
+
+<Scrolly label="道路と敷地の関係を描き足していく配置図">
+  <svg slot="stage" class="road" viewBox="0 0 400 370" role="img" aria-label="幅3mの道路に面した敷地。中心線から2mまで後退した部分は敷地面積に数えない。奥の旗竿地は路地部分で道路に接し、道路に接していない敷地は再建築不可。">
+    <defs>
+      <pattern id="rd-hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="5" stroke="var(--accent)" stroke-width="1" />
+      </pattern>
+    </defs>
+
+    <!-- 1 道路 -->
+    <g data-step="1">
+      <rect x="0" y={ROAD_TOP} width="400" height={ROAD_W} class="road-fill" />
+      <line class="ln draw" x1="0" y1={ROAD_TOP} x2="400" y2={ROAD_TOP} />
+      <line class="ln draw" x1="0" y1={ROAD_TOP + ROAD_W} x2="400" y2={ROAD_TOP + ROAD_W} />
+      <line class="ln-thin" x1="386" y1={BOUND} x2="386" y2={BOUND + 4 * PX} />
+      <line class="ln-thin" x1="380" y1={BOUND} x2="392" y2={BOUND} />
+      <line class="ln-thin" x1="380" y1={BOUND + 4 * PX} x2="392" y2={BOUND + 4 * PX} />
+      <text x="380" y={BOUND + 4 * PX + 16} font-size="11" text-anchor="end">原則 幅4m以上</text>
+      <text x="10" y={ROAD_TOP + ROAD_W + 18} font-size="11">この道路は幅3m（2項道路）</text>
+    </g>
+
+    <!-- 2 敷地と接道 -->
+    <g data-step="2">
+      <rect x="30" y="130" width="150" height={ROAD_TOP - 130} class="site" />
+      <text x="105" y="205" font-size="12" text-anchor="middle">敷地A</text>
+      <line class="ln-accent draw" x1="30" y1={ROAD_TOP} x2="180" y2={ROAD_TOP} />
+      <text x="105" y={ROAD_TOP - 22} font-size="10.5" text-anchor="middle" class="accent-text">道路に2m以上接する</text>
+    </g>
+
+    <!-- 3 セットバック -->
+    <g data-step="3">
+      <line class="ln-thin" x1="0" y1={CENTER} x2="400" y2={CENTER} stroke-dasharray="8 3 2 3" />
+      <text x="200" y={CENTER + 4} font-size="9.5" class="mute-text">道路の中心線</text>
+      <rect x="30" y={BOUND} width="150" height={ROAD_TOP - BOUND} fill="url(#rd-hatch)" />
+      <line class="ln-accent" x1="30" y1={BOUND} x2="180" y2={BOUND} stroke-dasharray="4 2" />
+      <text x="186" y={BOUND + 5} font-size="10.5" class="accent-text">← 後退線</text>
+      <text x="105" y="222" font-size="10" text-anchor="middle" class="mute-text">中心線から2mまでの斜線部分は</text>
+      <text x="105" y="236" font-size="10" text-anchor="middle" class="mute-text">敷地面積に数えない</text>
+    </g>
+
+    <!-- 4 旗竿地 -->
+    <g data-step="4">
+      <path class="ln draw" d={`M220 30 H380 V130 H280 V${ROAD_TOP} H250 V130 H220 Z`} />
+      <text x="300" y="85" font-size="12" text-anchor="middle">敷地B（旗竿地）</text>
+      <text x="290" y="200" font-size="10" class="mute-text">路地部分</text>
+      <text x="290" y="214" font-size="10" class="mute-text">幅・長さは</text>
+      <text x="290" y="228" font-size="10" class="mute-text">自治体の条例</text>
+    </g>
+
+    <!-- 5 再建築不可 -->
+    <g data-step="5">
+      <rect x="30" y="30" width="150" height="90" class="site-no" />
+      <text x="105" y="70" font-size="12" text-anchor="middle">敷地C</text>
+      <text x="105" y="90" font-size="10.5" text-anchor="middle" class="accent-text">道路に接していない</text>
+      <text x="105" y="106" font-size="10.5" text-anchor="middle" class="accent-text">→ 広告に「再建築不可」</text>
+    </g>
+  </svg>
+
+  <li>
+    <h4>道路は原則、幅4m以上</h4>
+    <p>建築基準法の「道路」は原則として幅<Fact id="law-kijunho-road" k="width" unit="m" />以上。見た目が道でも、法律上の道路とは限りません。</p>
+  </li>
+  <li>
+    <h4>敷地は道路に2m以上接する</h4>
+    <p>家を建てる敷地は、道路に<Fact id="law-kijunho-road" k="frontage" unit="m" />以上接していなければなりません（接道義務。例外あり）。</p>
+  </li>
+  <li>
+    <h4>幅4m未満の道路ではセットバック</h4>
+    <p>幅4m未満の2項道路では、中心線から2mの線が道路の境界とみなされます<Fact id="law-kijunho-road2" text="" />。後退した部分は敷地面積に数えません<Fact id="law-sekourei-setback" text="" />。例：間口10mで0.5m後退すると5㎡減ります。</p>
+  </li>
+  <li>
+    <h4>旗竿地</h4>
+    <p>細い路地部分（竿）で道路に接する土地。竿の部分も面積と価格に含まれますが、家は建てられません。路地の幅・長さの条件は自治体の条例で決まります。</p>
+  </li>
+  <li>
+    <h4>接道2m未満は「再建築不可」</h4>
+    <p>広告では「再建築不可」または「建築不可」と明示するルールがあります<Fact id="rftc-ad-rules" text="" />。</p>
+  </li>
+</Scrolly>
+
+<div class="checklist">
+  <p class="cl-title">広告で見るべき表示<Fact id="rftc-ad-rules" text="" /></p>
+  <ul>
+    <li>セットバックを要する部分が面積のおおむね10%以上 → その面積</li>
+    <li>路地状部分・傾斜地がおおむね30%以上 → その旨と割合</li>
+    <li>擁壁のないがけの上や下</li>
+    <li>高圧線の下</li>
+    <li>古家あり（解体が必要か）</li>
+    <li>「再建築不可」「建築不可」</li>
+  </ul>
+</div>
+
+<style>
+  .road {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+  }
+
+  .road-fill {
+    fill: var(--paper-deep);
+  }
+
+  .site {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: 1.2px;
+  }
+
+  .site-no {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.2px;
+    stroke-dasharray: 5 3;
+  }
+
+  .checklist {
+    margin-top: 1.5rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--ink);
+  }
+
+  .cl-title {
+    font-weight: 800;
+    margin: 0 0 0.4rem;
+  }
+
+  .checklist ul {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: 0.3rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .checklist li::before {
+    content: '□';
+    color: var(--accent);
+    margin-right: 0.5rem;
+  }
+</style>

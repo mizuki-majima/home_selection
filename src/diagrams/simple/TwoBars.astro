@@ -1,0 +1,94 @@
+---
+// やさしい図：借りられる額と、返せる額
+import Fact from '../../components/Fact.astro';
+import { valueOf } from '../../lib/facts';
+
+const b = valueOf('f35-example-640', 'borrowable');
+const r = valueOf('f35-example-640', 'repayable');
+const pct = (v: number) => `${((v / b) * 100).toFixed(1)}%`;
+---
+
+<div class="easy">
+  <p class="cond">例：年収640万円・金利2.25%（固定）・35年の場合（住宅金融支援機構の試算例）<Fact id="f35-example-640" text="" /></p>
+  <div class="bars">
+    <div class="row">
+      <p class="lbl">銀行などが<strong>貸してくれる額</strong></p>
+      <div class="bar"><span class="fill ink" style={`width:100%`}></span></div>
+      <p class="val">約<Fact id="f35-example-640" k="borrowable" unit="万円" bare /></p>
+    </div>
+    <div class="row">
+      <p class="lbl">今の家計で<strong>無理なく返せる額</strong></p>
+      <div class="bar"><span class="fill ac" style={`width:${pct(r)}`}></span></div>
+      <p class="val ac">約<Fact id="f35-example-640" k="repayable" unit="万円" bare /></p>
+    </div>
+  </div>
+  <p class="easy-note">
+    この例では、返せる額は貸してくれる額の<strong>半分以下</strong>。予算は「貸してくれる額」ではなく「返せる額」から決めます。
+  </p>
+</div>
+
+<style>
+  .cond {
+    font-size: 0.85rem;
+    color: var(--mute);
+  }
+
+  .bars {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 12rem) minmax(0, 1fr) 7rem;
+    gap: 0.4rem 1rem;
+    align-items: center;
+  }
+
+  .lbl,
+  .val {
+    margin: 0;
+  }
+
+  .lbl {
+    font-size: 0.95rem;
+  }
+
+  .bar {
+    height: 28px;
+    border: 1.5px solid var(--ink);
+  }
+
+  .fill {
+    display: block;
+    height: 100%;
+  }
+
+  .fill.ink {
+    background: var(--ink);
+  }
+
+  .fill.ac {
+    background: var(--accent);
+  }
+
+  .val {
+    font-size: 1.25rem;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .val.ac {
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .row {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .lbl {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

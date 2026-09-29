@@ -1,0 +1,169 @@
+---
+// 図3-2 地震が教えたこと（熊本2016・能登2024の木造の倒壊率を建築時期別に）
+import Fact from '../../components/Fact.astro';
+import { valueOf } from '../../lib/facts';
+
+const eras = [
+  { key: 'old', label: '1981年5月以前（旧耐震）' },
+  { key: 'mid', label: '1981年6月〜2000年5月' },
+  { key: 'new', label: '2000年6月以降' },
+];
+const quakes = [
+  { id: 'kumamoto-2016-era', name: '熊本 2016（益城町）' },
+  { id: 'noto-2024-era', name: '能登 2024' },
+];
+const MAX = 30;
+const W = 300;
+---
+
+<div class="quakes">
+  <div class="panels">
+    {
+      quakes.map((q) => (
+        <div class="panel">
+          <p class="pname">{q.name}・木造の倒壊率</p>
+          <svg viewBox={`0 0 ${W + 60} 130`} role="img" aria-label={`${q.name}の木造の倒壊率。${eras.map((e) => `${e.label} ${valueOf(q.id, e.key)}%`).join('、')}`}>
+            {eras.map((e, i) => {
+              const v = valueOf(q.id, e.key);
+              const w = (v / MAX) * W;
+              const y = 10 + i * 40;
+              return (
+                <g>
+                  <text x="0" y={y} font-size="11" class="mute-text">{e.label}</text>
+                  <rect x="0" y={y + 6} width={W} height="14" class="track" />
+                  <rect x="0" y={y + 6} width={Math.max(w, 1.5)} height="14" class={e.key === 'new' ? 'bar accent' : 'bar'} />
+                  <text x={Math.max(w, 1.5) + 6} y={y + 18} font-size="13" font-weight="700">{v}%</text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="grades">
+    <p class="gtitle">耐震等級を取得した木造住宅の実績（件数が少ないことに注意）</p>
+    <div class="gcells">
+      <div class="g"><span class="n"><Fact id="kumamoto-2016-grade" k="g3N" bare /><small>棟</small></span><span>熊本2016・等級3<br />無被害 <Fact id="kumamoto-2016-grade" k="g3None" unit="%" />（<Fact id="kumamoto-2016-grade" k="g3NoneCount" unit="棟" bare />）</span></div>
+      <div class="g"><span class="n"><Fact id="noto-2024-grade" k="g2N" bare /><small>棟</small></span><span>能登2024・等級2<br />1棟が軽微〜中破</span></div>
+      <div class="g"><span class="n"><Fact id="noto-2024-grade" k="g3N" bare /><small>棟</small></span><span>能登2024・等級3<br />1棟が軽微〜中破</span></div>
+      <div class="g"><span class="n"><Fact id="noto-2024-grade" k="longlifeN" bare /><small>棟</small></span><span>能登2024・長期優良<br />1棟が軽微〜中破<Fact id="noto-2024-grade" text="" /></span></div>
+    </div>
+  </div>
+
+  <div class="structure-note">
+    <p>
+      能登の構造別の倒壊率は木造<Fact id="noto-2024-structure" k="wood" bare />・S造<Fact id="noto-2024-structure" k="steel" bare />・RC造<Fact id="noto-2024-structure" k="rc" />。ただし<strong>建築年代の差が混ざっています</strong>（全構造で旧耐震<Fact id="noto-2024-structure" k="eraOld" bare />、1981〜2000年<Fact id="noto-2024-structure" k="eraMid" bare />、2000年以降<Fact id="noto-2024-structure" k="eraNew" bare />）。
+    </p>
+  </div>
+
+  <div class="flash">
+    <p class="ftitle">令和8年熊本地震（2026年7月）速報の所見<Fact id="kumamoto-2026-wood" text="" /></p>
+    <ul>
+      <li>築45年超と推定される木造住宅の倒壊が多い</li>
+      <li>重い屋根と釘だけで留めた筋かい、正面に開口の多い店舗の倒壊も見られた</li>
+      <li>築年数が比較的浅い建物の多くは、外観上大きな被害なし</li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  .panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: 1.5rem 2.5rem;
+  }
+
+  .pname {
+    font-weight: 700;
+    margin: 0 0 0.4rem;
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .track {
+    fill: var(--paper-deep);
+  }
+
+  .bar {
+    fill: var(--ink);
+  }
+
+  .bar.accent {
+    fill: var(--accent);
+  }
+
+  .mute-text {
+    fill: var(--mute);
+  }
+
+  .grades {
+    margin-top: 2rem;
+    border-top: 1px solid var(--ink);
+    padding-top: 1rem;
+  }
+
+  .gtitle {
+    font-weight: 700;
+    margin: 0 0 0.8rem;
+  }
+
+  .gcells {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+    gap: 1rem;
+  }
+
+  .g {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .n {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .n small {
+    font-size: 0.9rem;
+    margin-left: 0.15em;
+  }
+
+  .gsrc {
+    font-size: 0.8rem;
+    color: var(--mute);
+    margin: 0.6rem 0 0;
+  }
+
+  .structure-note {
+    margin-top: 1.5rem;
+    font-size: 0.92rem;
+  }
+
+  .flash {
+    margin-top: 1rem;
+    padding: 1rem 1.2rem;
+    border: 1px dashed var(--ink);
+    font-size: 0.9rem;
+  }
+
+  .ftitle {
+    font-weight: 700;
+    margin: 0 0 0.4rem;
+  }
+
+  .flash ul {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+</style>

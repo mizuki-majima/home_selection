@@ -1,0 +1,125 @@
+---
+// やさしい図：木造・鉄骨・RC の良いところと気をつけるところ
+import Fact from '../../components/Fact.astro';
+
+const PICS = [
+  {
+    t: '木造',
+    d: '木の柱と梁で組む',
+    ic: '<path d="M10 56 H54"/><rect x="12" y="14" width="6" height="42"/><rect x="46" y="14" width="6" height="42"/><rect x="10" y="10" width="44" height="6"/><line x1="18" y1="54" x2="46" y2="18" class="ac"/><path d="M14 24 V30 M14 38 V44 M48 22 V28 M48 40 V46" stroke-width="1"/>',
+  },
+  {
+    t: '鉄骨造',
+    d: '鉄の柱と梁で組む',
+    ic: '<path d="M10 56 H54"/><path d="M12 14 H20 M16 14 V56 M12 56 H20"/><path d="M44 14 H52 M48 14 V56 M44 56 H52"/><path d="M10 10 H54 M10 16 H54"/><line x1="16" y1="18" x2="48" y2="54" class="ac"/><line x1="48" y1="18" x2="16" y2="54" class="ac"/>',
+  },
+  {
+    t: '鉄筋コンクリート造（RC）',
+    d: '鉄筋を入れたコンクリートの壁と床',
+    ic: '<path d="M10 56 H54"/><rect x="12" y="10" width="40" height="46" class="fl"/><rect x="12" y="10" width="40" height="46"/><path d="M18 18 H46 M18 28 H46 M18 38 H46 M18 48 H46" class="ac" stroke-dasharray="2 4"/>',
+  },
+];
+---
+
+<div class="easy">
+  <ul class="easy-grid">
+    {
+      PICS.map((x) => (
+        <li class="easy-card">
+          <svg class="ic" viewBox="0 0 64 64" aria-hidden="true" set:html={x.ic} />
+          <h3>{x.t}</h3>
+          <p>{x.d}</p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="easy-table-wrap" tabindex="0" role="region" aria-label="構造ごとの良いところと気をつけるところ">
+    <table class="easy-table pc">
+      <thead>
+        <tr>
+          <th scope="col"><span class="sr-only">構造</span></th>
+          <th scope="col">良いところ</th>
+          <th scope="col">気をつけるところ</th>
+          <th scope="col">データで見ると</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">木造</th>
+          <td>
+            <ul>
+              <li>建てられる会社が多く、選択肢が広い</li>
+              <li>建築費の単価は3つの中で低め</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>地震への強さは、壁の量・バランス・接合部しだい。耐震等級で確かめる</li>
+              <li>湿気・シロアリ対策。床まわりは5〜10年ごとに防腐・防蟻の処理をし直すのが目安<Fact id="jhf-maintenance" text="" /></li>
+            </ul>
+          </td>
+          <td>
+            持家一戸建ての約<Fact id="chakko-2025-mochiie" k="woodShare" unit="%" bare />。単価<Fact id="chakko-2025-unit" k="wood" unit="万円/㎡" />
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">鉄骨造</th>
+          <td>
+            <ul>
+              <li>柱や梁を細く・少なくでき、大きな窓や広い部屋をつくりやすいとされる</li>
+              <li>工場で部材をつくるプレハブが多く、品質をそろえやすいとされる</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>建築費の単価は木造より高め</li>
+              <li>鉄は熱を伝えやすいので、断熱の工夫を確かめる</li>
+              <li>ほとんどがプレハブで、頼める会社が限られやすい</li>
+            </ul>
+          </td>
+          <td>
+            単価<Fact id="chakko-2025-unit" k="steel" unit="万円/㎡" />。鉄骨造の約<Fact id="chakko-2025-prefab" />がプレハブ
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">RC造</th>
+          <td>
+            <ul>
+              <li>重くて頑丈。音や火に強いとされる</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>建築費の単価は3つの中でいちばん高い</li>
+              <li>重いぶん、地盤の対策が大きくなりやすい</li>
+              <li>一戸建てでは少数派</li>
+            </ul>
+          </td>
+          <td>
+            持家一戸建てで<Fact id="chakko-2025-mochiie" k="rc" unit="戸" bare />。単価<Fact id="chakko-2025-unit" k="rc" unit="万円/㎡" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="easy-note">
+    <strong>「鉄骨のほうが地震に強い」とは言い切れません。</strong>過去の大地震で被害を分けたのは、構造の種類よりも、建てた時期・壁の量と釣り合い・接合部・耐震等級でした（くわしくは図3-2）。単価の差にも、構造材だけでなく仕様や会社の差が混ざっています。
+  </p>
+</div>
+
+<style>
+  .pc ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+
+  .pc li + li {
+    margin-top: 0.3rem;
+  }
+
+  .pc td:last-child {
+    font-size: 0.85rem;
+    min-width: 9rem;
+  }
+</style>

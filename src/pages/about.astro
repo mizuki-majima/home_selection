@@ -12,7 +12,7 @@ import { UPDATED } from '../data/chapters';
     <section>
       <h2>目的</h2>
       <p class="measure">
-        住宅購入（主に新築一戸建て・注文住宅）を検討する人が、図を見るだけで「決めどころ」の要点をつかめるようにするための情報サイトです。建売住宅とマンションは、比較の対象として扱います。
+        住宅購入（主に新築一戸建て・注文住宅）を検討する人が、図を見るだけで「決めどころ」の要点をつかめるようにするための情報サイトです。建売住宅とマンションは、比較の対象として扱います。やさしい話（STEP 1）から、くわしい話（STEP 3）へ順に読めるように並べています。図にも「やさしい・ふつう・くわしい」の印を付けています。
       </p>
     </section>
 
@@ -52,6 +52,7 @@ import { UPDATED } from '../data/chapters';
     <section>
       <h2>更新履歴</h2>
       <ul class="measure">
+        <li><time datetime={UPDATED}>{UPDATED.replaceAll('-', '.')}</time> やさしい順に並べ替え（8章・図解22点）。各章の最初に「ひとことで言うと」とやさしい図を追加し、「家を買うタイミング」「木造・鉄骨の良いところと気をつけるところ」を加えた</li>
         <li><time datetime={UPDATED}>{UPDATED.replaceAll('-', '.')}</time> 公開（7章・図解14点）</li>
       </ul>
     </section>
